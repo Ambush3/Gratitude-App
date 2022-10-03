@@ -1,23 +1,23 @@
 <%- include('partials/header') -%>
-  <div class="container">
+  <div class="feed-container">
     <!-- Link that bring user back to profile page -->
-    <a href="/profile" class="btn btn-primary">Back to Profile</a>
-    <div class="row justify-content-center mt-5">
-      <ul class="row list-unstyled">
+    <div class="button-container">
+      <a href="/profile" class="btn btn-primary">Back to Profile</a>
+    </div>
+    <div class="container p-5">
+      <ul class="list-unstyled">
         <% for(var i=0; i<posts.length; i++) {%>
-          <li class="col-6 justify-content-between mt-5">
+          <li class="col text-center mb-3">
             <a href="/post/<%= posts[i]._id%>">
-              <img class="img-fluid" src="<%= posts[i].image%>">
+              <img class="img-fluid img-thumbnail" style="width: 340px" src="<%= posts[i].image%>">
             </a>
-            <div class="row justify-content-between">
-              <div class="col-6">
-                <a href="/post/<%= posts[i]._id%>">
+            <div class="row justify-content-between mt-2">
+              <div class="text-center">
+                <a href="/post/<%= posts[i]._id%>" class="text-decoration-none">
                   <h3><%= posts[i].title%></h3>
+                  <!-- Show username of the user who posted the post -->
+                    <p>By <%= posts[i].userName%></p>
                 </a>
-              </div>
-              <div class="col-6">
-                <!-- show username -->
-                <h3><%= posts[i].userName%></h3>
               </div>
             </div>
           </li>

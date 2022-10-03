@@ -41,6 +41,7 @@ module.exports = {
         caption: req.body.caption,
         likes: 0,
         user: req.user.id, // add the user id to the post
+        username: req.user.name, // add the user name to the post
       });
       console.log("Post has been added!");
       res.redirect("/profile");
