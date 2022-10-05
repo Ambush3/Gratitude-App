@@ -2,19 +2,12 @@
 <div class="container">
   <div class="row mt-5">
       <div class="col-6">
-          <div>
-              <p><strong>Username</strong>: <%= user.userName %></p>
-              <p><strong>Email</strong>: <%= user.email %></p>
-              <a href="/logout" class="col-3 btn btn-primary">Logout</a>
-          </div>
-          <div class="mt-5">
             <h2>Add your gratitude</h2>
             <form action="/post/createPost" enctype="multipart/form-data" method="POST">
               <div class="mb-3">
                   <label for="title" class="form-label">Title</label>
                   <input type="text" class="form-control" id="title" name="title">
-              </div>
-              <div class="mb-3">
+              <div class="mb-3 mt-3">
                 <label for="caption" class="form-label">What are you thankful for today?</label>
                 <textarea class="form-control" id="caption" name="caption"></textarea>
               </div>
@@ -33,7 +26,7 @@
                   <li class="col-12">
                       <div class="card mb-3">
                           <div class="card-body">
-                              <a href="/post/<%= post._id %>">
+<!--                              <a href="/post/<%= post._id %>">-->
 
                               <img src="<%= post.image %>" class="card-img-top" alt="...">
                               </a>
@@ -44,9 +37,9 @@
                   </li>
               <% }) %>
           </ul>
-        <div class="row justify-content-center mb-5 mt-5">
-          <a class="btn btn-primary" href="/feed">Return to Feed</a>
-        </div>
+<!--        <div class="row justify-content-center mb-5 mt-5">-->
+<!--          <a class="btn btn-primary" href="/feed">Return to Feed</a>-->
+<!--        </div>-->
       </div>  
     </div>
   </div>
