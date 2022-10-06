@@ -4,7 +4,7 @@ const User = require("../models/User");
 
 exports.getLogin = (req, res) => {
   if (req.user) {
-    return res.redirect("/feed");
+    return res.redirect("/profile");
   }
   res.render("login", {
     title: "Login",
@@ -62,6 +62,15 @@ exports.getSignup = (req, res) => {
   }
   res.render("signup", {
     title: "Create Account",
+  });
+};
+
+exports.getForgotPassword = (req, res) => {
+  if (req.user) {
+    return res.redirect("/profile");
+  }
+  res.render("forgot-password", {
+    title: "Forgot Password",
   });
 };
 
