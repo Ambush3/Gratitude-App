@@ -74,78 +74,47 @@ exports.getForgotPassword = (req, res) => {
   });
 };
 
-exports.postForgotPassword = (req, res, next) => {
-    const validationErrors = [];
-    if (!validator.isEmail(req.body.email))
-        validationErrors.push({ msg: "Please enter a valid email address." });
 
+exports.postForgotPassword = (req, res, next) => {
+    // using bcrypt and salt, match email from #email in forgot-password.ejs and find email
+    // in database then change password from newPassword input
+    const validationErrors = [];
+    if (!validator.isEmail(req.body.email)){
+        validationErrors.push({ msg: "Please enter a valid email address." });
+    }
     if (validationErrors.length) {
         req.flash("errors", validationErrors);
-        return res.redirect("/forgot-password");
+        return res.redirect("../forgot-password");
     }
     req.body.email = validator.normalizeEmail(req.body.email, {
         gmail_remove_dots: false,
     });
-
-    async.waterfall(
-        [
-        function createRandomToken(done) {
-            crypto.randomBytes(16, (err, buf) => {
-            const token = buf.toString("hex");
-            done(err, token);
-            });
-        },
-        function setRandomToken(token, done) {
-            User.findOne({ email: req.body.email }, (err, user) => {
-            if (err) {
-                return done(err);
-            }
-            if (!user) {
-                req.flash("errors", {
-                msg: "Account with that email address does not exist.",
-                });
-                return res.redirect("/forgot-password");
-            }
-            user.passwordResetToken = token;
-            user.passwordResetExpires = Date.now() + 3600000; // 1 hour
-            user.save((err) => {
-                done(err, token, user);
-            });
-            });
-        },
-        function sendForgotPasswordEmail(token, user, done) {
-            const transporter = nodemailer.createTransport({
-            service: "SendGrid",
-            auth: {
-                user: process.env.SENDGRID_USER,
-                pass: process.env.SENDGRID_PASSWORD,
-            },
-            });
-            const mailOptions = {
-            to: user.email,
-            from: "",
-            subject: "Reset your password on",
-            text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
-                Please click on the following link, or paste this into your browser to complete the process:\n\n
-                http://${req.headers.host}/reset/${token}\n\n
-                If you did not request this, please ignore this email and your password will remain unchanged.\n`,
-            };
-            transporter.sendMail(mailOptions, (err) => {
-            req.flash("info", {
-                msg: `An e-mail has been sent to ${user.email} with further instructions.`,
-            });
-            done(err);
-            }
-        );
-        },
-        ],
-        (err) => {
+    const email = req.body.email;
+    const newPassword = req.body.newPassword;
+    const confirmPassword = req.body.confirmPassword;
+    if (newPassword !== confirmPassword){
+        req.flash("errors", { msg: "Passwords do not match" });
+        return res.redirect("../forgot-password");
+    }
+    User.findOne({ email: email }, (err, user) => {
         if (err) {
             return next(err);
         }
-        res.redirect("/forgot-password");
+        if (!user) {
+            req.flash("errors", { msg: "Account with that email address does not exist." });
+            return res.redirect("../forgot-password");
         }
-    );
+        user.password = newPassword;
+        user.save((err) => {
+            if (err) {
+                return next(err);
+            }
+            req.flash("success", { msg: "Success! Your password has been changed." });
+            res.redirect("/");
+        });
+
+    });
+
 }
 
 exports.postSignup = (req, res, next) => {
