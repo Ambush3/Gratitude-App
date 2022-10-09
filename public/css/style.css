@@ -1,3 +1,7 @@
+body, html {
+    overflow-x: hidden;
+}
+
 .header-container {
     display: grid;
     grid-template-columns: minmax(200px, 300px) minmax(400px, 500px) minmax(200px, 300px);
@@ -26,14 +30,6 @@
 }
 
 
-
-HTML CSS
-
-Result
-Skip Results Iframe
-
-EDIT ON
-
 #menu__toggle {
     opacity: 0;
 }
@@ -53,12 +49,12 @@ EDIT ON
 }
 .menu__btn {
     position: fixed;
-    top: 20px;
+    top: 32px;
     left: 20px;
     width: 26px;
     height: 26px;
     cursor: pointer;
-    z-index: 1;
+    z-index: 3;
 }
 .menu__btn > span,
 .menu__btn > span::before,
@@ -92,6 +88,7 @@ EDIT ON
     color:rgb(31, 125, 252);
     box-shadow: 2px 2px 6px rgba(0, 0, 0, .4);
     transition-duration: .25s;
+    z-index: 2;
 }
 .menu__item {
     display: block;
@@ -109,4 +106,10 @@ EDIT ON
 
 #menu__toggle {
     display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .menu__box {
+        width: 150px
+    }
 }

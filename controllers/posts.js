@@ -11,15 +11,6 @@ module.exports = {
       console.log(err);
     }
   },
-  getFeed: async (req, res) => {
-    try {
-      const posts = await Post.find().sort({ createdAt: "desc" }).lean(); // sort the posts by the date they were created
-      // lean() is a method that converts the mongoose object to a javascript object
-      res.render("feed.ejs", { posts: posts }); // render the feed page and pass in the posts
-    } catch (err) {
-      console.log(err);
-    }
-  },
   getPost: async (req, res) => {
     try {
       const post = await Post.findById(req.params.id); // find the post by its id
