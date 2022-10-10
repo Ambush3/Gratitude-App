@@ -61,6 +61,7 @@ app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
 app.use("/forgot-password", mainRoutes);
 
+
 //Server Running
 app.listen(process.env.PORT, () => {
   console.log("Server is running, you better catch it!");

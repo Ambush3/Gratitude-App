@@ -1,43 +1,47 @@
 <%- include('partials/header') -%>
 <div class="container">
-  <div class="row mt-5 justify-content-center">
-<!--      <div class="col-6">-->
-<!--          -->
-<!--      </div>-->
-      <div class="col-lg-6 col-md-8 col-sm-12">
-          <h2>Add your gratitude</h2>
-          <form action="/post/createPost" enctype="multipart/form-data" method="POST">
-              <div class="mb-3">
-                  <label for="title" class="form-label">Title</label>
-                  <input type="text" class="form-control" id="title" name="title">
-                  <div class="mb-3 mt-3">
-                      <label for="caption" class="form-label">What are you thankful for today?</label>
-                      <textarea class="form-control" id="caption" name="caption"></textarea>
-                  </div>
-                  <div class="mb-3">
-                      <label for="imgUpload" class="form-label">Image</label>
-                      <input type="file" class="form-control" id="imageUpload" name="file">
-                  </div>
-                  <button type="submit" class="btn btn-primary" value="Upload">Submit</button>
-          </form>
-      </div>
-          <ul class="mt-5 row list-unstyled">
-                <% posts.reverse().forEach(function(post) { %>
-                  <li class="col-12">
-                      <div class="card mb-3">
-                          <div class="card-body">
-<!--                              <a href="/post/<%= post._id %>">-->
-                                  <h5 class="card-title"><%= post.title %></h5>
-                                  <p class="card-text"><%= post.caption %></p>
-                              <img src="<%= post.image %>" class="card-img-top" alt="...">
-                                <p class="card-text"><small class="text-muted"><%= post.createdAt.toDateString() %></small></p>
-                          </div>
-                      </div>
-                  </li>
-              <% }) %>
-          </ul>
-      </div>  
+    <div class="row mt-5 justify-content-center">
+        <!--      <div class="col-6">-->
+        <!--          -->
+        <!--      </div>-->
+        <div class="col-lg-6 col-md-8 col-sm-12">
+            <h2>Add your gratitude</h2>
+            <form action="/post/createPost" enctype="multipart/form-data" method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title">
+                    <div class="mb-3 mt-3">
+                        <label for="caption" class="form-label">What are you thankful for today?</label>
+                        <textarea class="form-control" id="caption" name="caption"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="imgUpload" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="imageUpload" name="file">
+                    </div>
+                    <button type="submit" class="btn btn-primary" value="Upload">Submit</button>
+            </form>
+        </div>
+        <ul class="mt-5 row list-unstyled">
+            <% posts.reverse().forEach(function(post) { %>
+                <li class="col-12">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <!--                              <a href="/post/<%= post._id %>">-->
+                            <h5 class="card-title"><%= post.title %></h5>
+                            <p class="card-text"><%= post.caption %></p>
+                            <img src="<%= post.image %>" class="card-img-top" alt="...">
+                            <p class="card-text"><small class="text-muted"><%= post.createdAt.toDateString() %></small></p>
+                            <!-- Delete button -->
+                            <form action="/post/<%= post._id %>?_method=DELETE" method="POST">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
     </div>
-  </div>
+</div>
+</div>
 </div>
 <%- include('partials/footer') -%>
