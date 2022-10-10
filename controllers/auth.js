@@ -142,9 +142,6 @@ exports.postSignup = (req, res, next) => {
     password: req.body.password,
   });
 
-  // find userName of current post
-  const userName = req.body.userName;
-
   User.findOne(
     { $or: [{ email: req.body.email }, { userName: req.body.userName }] },
     (err, existingUser) => {
