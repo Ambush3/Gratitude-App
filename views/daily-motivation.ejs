@@ -3,12 +3,19 @@
 
 <div class="motivational-quote">
     <div class="motivational-quote__text">
-        <p class="motivational-quote__text--quote">"{{quote}}"</p>
-        <p class="motivational-quote__text--author">- {{author}}</p>
+        <!--        // the response format-->
+        <!--        // q = quote text-->
+        <!--        // a = author name-->
+        <!--        // i = author image (key required)-->
+        <!--        // c = character count-->
+        <!--        // h = pre-formatted HTML quote-->
+
+        <p><%- quote.q %></p>
+        <p><%- quote.a %></p>
     </div>
-    <div class="motivational-quote__button">
-        <button class="motivational-quote__button--new-quote">New Quote</button>
-    </div>
+
+
+
 </div>
 
 <%- include('partials/footer') -%>

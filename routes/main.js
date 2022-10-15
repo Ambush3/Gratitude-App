@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/auth");
 const homeController = require("../controllers/home");
+const motivationController = require("../controllers/motivation");
 const postsController = require("../controllers/posts");
 const { ensureAuth} = require("../middleware/auth");
 
@@ -16,6 +17,7 @@ router.post("/signup", authController.postSignup);
 router.get("/forgot-password", authController.getForgotPassword);
 router.post("/forgot-password", authController.postForgotPassword);
 router.delete("/post/:id", postsController.deletePost);
-router.get("/daily-motivation", homeController.getMotivation);
+router.get("/daily-motivation", motivationController.getMotivation);
+
 
 module.exports = router;
