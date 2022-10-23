@@ -22,6 +22,18 @@
                     <button type="submit" class="btn btn-primary" value="Upload">Submit</button>
             </form>
         </div>
+        <!-- Create a way for user to choose date on date picker widget -->
+        <!-- Let user click on date picker widget to show post/posts from that date-->
+        
+        <div class="date-widget">
+            <form action="/post/date" method="POST">
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="date" name="date">
+                    <button type="submit" class="btn btn-primary" value="Upload">Submit</button>
+            </form>
+        </div>
+
         <ul class="mt-5 row list-unstyled">
             <% posts.reverse().forEach(function(post) { %>
                 <li class="col-12">

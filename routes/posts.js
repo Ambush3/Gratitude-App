@@ -13,7 +13,8 @@ router.put("/likePost/:id", postsController.likePost);
 
 router.delete("/deletePost/:id", postsController.deletePost);
 
-// router for logout
 router.get("/logout", postsController.logout);
+
+router.post("/date", postsController.date);
 
 module.exports = router;

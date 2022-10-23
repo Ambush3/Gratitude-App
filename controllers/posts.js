@@ -68,8 +68,21 @@ module.exports = {
     }
   },
 
-    logout: async (req, res) => {
-        req.logout();
-        res.redirect("/");
+  logout: async (req, res) => {
+      req.logout();
+      res.redirect("/");
+  },
+
+  // get post from post/date
+  date: async (req, res) => {
+    // find posts of current logged in user
+    // only show posts that match the date selected in the date-widget form
+    try {
+      const posts = await Post.find({ user: req.user.id, createdAt: req.body.date }); // find all posts by the current user id
+      res.render("profile.ejs", { posts: posts, user: req.user }); // render the profile page and pass the posts and user data to it
     }
+    catch (err) {
+      console.log(err);
+    }
+  }
 };
