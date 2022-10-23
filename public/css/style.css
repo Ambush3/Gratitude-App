@@ -118,3 +118,26 @@ h1 a {
         width: 150px
     }
 }
+
+.motivational-quote {
+    display: flex;
+    justify-content: center;
+    margin: 3em auto;
+    padding: 1em;
+}
+
+.the-quote {
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: 600;
+    text-align: center;
+    color: #000;
+}
+
+.the-author {
+    font-size: 1em;
+    font-style: italic;
+    text-align: right;
+    color: #000;
+}
+
