@@ -2,7 +2,7 @@
 Grattitude App is an App I made where users can sign up, login, and upload  what you have grattitude for daily. 
 You can also upload images for your post, which are uploaded to cloudinary.  
 
-Currently working:
+Currently working on:
 1. Users can get an email that will send them a gratitude via email that they may have posted   
 in the past
 2. Users can select a date within the application, and see what post/grattitude comes up for that selected date.  
