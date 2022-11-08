@@ -15,8 +15,8 @@
                         <label for="caption" class="form-label">What are thing you are grateful for today?</label>
                         <textarea class="form-control" id="caption" name="caption"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="imgUpload" class="form-label">Image</label>
+                    <div class="mb-2">
+                        <label for="imgUpload" class="form-label">Image Upload</label>
                         <input type="file" class="form-control" id="imageUpload" name="file">
                     </div>
                     <button type="submit" class="btn btn-primary" value="Upload">Submit</button>
@@ -24,15 +24,18 @@
         </div>
         <!-- Create a way for user to choose date on date picker widget -->
         <!-- Let user click on date picker widget to show post/posts from that date-->
-        
+
+        <!--Calendar widget, when clicking search button, getPostsByDate checks to see if any posts match date selected -->
         <div class="date-widget">
-            <form action="/post/date" method="POST">
+            <form action="" method="POST">
                 <div class="mb-3">
-                    <label for="date" class="form-label">Date</label>
-                    <input type="date" class="form-control" id="date" name="date">
-                    <button type="submit" class="btn btn-primary" value="Upload">Submit</button>
+                    <label for="date" class="form-label">Search Posts By Date</label>
+                    <input type="date" class="mb-2 form-control" id="date" name="date">
+                    <button type="submit" class="btn btn-primary" value="Upload">Search</button>
+                </div>
             </form>
         </div>
+      
 
         <ul class="mt-5 row list-unstyled">
             <% posts.reverse().forEach(function(post) { %>
