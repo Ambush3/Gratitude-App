@@ -74,26 +74,11 @@ module.exports = {
   },
   
   getPostByDate: async (req, res) => {
-    // user selects a date from the calendar 
-    // if any posts match that date, display them on the profile page
-    // if no posts match that date, display a message saying "No posts found for that date"
-    // try {
-    //   const posts = await Post.find({ user: req.user.id, createdAt: req.body.date }); // find all posts by the current user id
-    //   res.render("profile.ejs", { posts: posts, user: req.user }); // render the profile page and pass the posts and user data to it
-    //   console.log("Posts found for that date", posts);
-    //   console.log(req.body.date);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-
-    // match the date from return getPostByDate(this) in profile.ejs
     try {
       const posts = await Post.find({ user: req.user.id, createdAt: req.body.date }); // find all posts by the current user id
       res.render("profile.ejs", { posts: posts, user: req.user }); // render the profile page and pass the posts and user data to it
-      console.log("Posts found for that date", posts);
       console.log(req.body.date);
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
   },

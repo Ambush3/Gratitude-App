@@ -9,7 +9,6 @@ router.post("/createPost", upload.single("file"), postsController.createPost);
 router.put("/likePost/:id", postsController.likePost);
 router.delete("/deletePost/:id", postsController.deletePost);
 router.get("/logout", postsController.logout);
-// router for getPostByDate
-router.post("/profile", postsController.getPostByDate);
+router.get("/profile", postsController.getPostByDate);
 
 module.exports = router;
