@@ -17,8 +17,8 @@ router.post("/signup", authController.postSignup);
 router.get("/forgot-password", authController.getForgotPassword);
 router.post("/forgot-password", authController.postForgotPassword);
 router.delete("/post/:id", postsController.deletePost);
-router.get("/daily-motivation", motivationController.getMotivation);
 router.post("/profile", postsController.getPostByDate);
+router.get("/daily-motivation", motivationController.getMotivation);
 
 
 module.exports = router;
