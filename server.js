@@ -61,6 +61,10 @@ app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
 app.use("/forgot-password", mainRoutes);
 app.use("/daily-motivation", mainRoutes);
+app.use("/profile", mainRoutes);
+app.use("/login", mainRoutes);
+app.use("/logout", mainRoutes);
+app.use("/signup", mainRoutes);
 
 
 //Server Running
