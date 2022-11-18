@@ -1,6 +1,7 @@
 const cloudinary = require("../middleware/cloudinary");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+const ProfilePic = require("../models/ProfilePic");
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -23,7 +24,7 @@ module.exports = {
   createPost: async (req, res) => {
     try {
       // Upload image to cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path); // upload the image to cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path);
 
       await Post.create({
         title: req.body.title,
@@ -32,7 +33,7 @@ module.exports = {
         caption: req.body.caption,
         likes: 0,
         user: req.user.id, // add the user id to the post
-        username: req.user.name, // add the user name to the post
+        username: req.user.name, // add the username to the post
       });
       console.log("Post has been added!");
       res.redirect("/profile");
@@ -40,6 +41,23 @@ module.exports = {
       console.log(err);
     }
   },
+
+  createProfilePic: async (req, res) => {
+    try {
+      // Upload image to cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path);
+
+      await ProfilePic.create({
+        image: result.secure_url,
+        cloudinaryId: result.public_id,
+      });
+      console.log("Profile pic has been added!");
+      res.redirect("/profile");
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
   likePost: async (req, res) => {
     try {
       await Post.findOneAndUpdate(

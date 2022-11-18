@@ -5,7 +5,9 @@
         <!--          -->
         <!--      </div>-->
         <div class="col-lg-6 col-md-8 col-sm-12">
-            <!-- Hi current logged in user -->
+            <!-- pic that user uploaded when signing up shows here -->
+            <img src="<%= user.profilePic %>" class="img-fluid rounded-circle" alt="profile picture">
+            <!-- Hi current logged-in user -->
             <h1 class="text-center">Hi <%= user.userName %></h1>
             <form action="/post/createPost" enctype="multipart/form-data" method="POST">
                 <div class="mb-3">
@@ -56,6 +58,5 @@
             <% }) %>
         </ul>
     </div>
-</div>
 </div>
 <%- include('partials/footer') -%>

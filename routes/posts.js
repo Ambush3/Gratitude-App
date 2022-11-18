@@ -10,5 +10,6 @@ router.put("/likePost/:id", postsController.likePost);
 router.delete("/deletePost/:id", postsController.deletePost);
 router.get("/logout", postsController.logout);
 router.post("/profile", postsController.getPostByDate);
+router.post("/createProfilePic", upload.single("file"), postsController.createProfilePic);
 
 module.exports = router;
