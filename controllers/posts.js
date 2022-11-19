@@ -42,22 +42,6 @@ module.exports = {
     }
   },
 
-  createProfilePic: async (req, res) => {
-    try {
-      // Upload image to cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path);
-
-      await ProfilePic.create({
-        image: result.secure_url,
-        cloudinaryId: result.public_id,
-      });
-      console.log("Profile pic has been added!");
-      res.redirect("/profile");
-    } catch (err) {
-      console.log(err);
-    }
-  },
-
   likePost: async (req, res) => {
     try {
       await Post.findOneAndUpdate(
@@ -100,4 +84,22 @@ module.exports = {
       console.log(err);
     }
   },
+
+  createProfilePic: async (req, res) => {
+    try {
+      // Upload image to cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path);
+
+      await ProfilePic.create({
+        image: result.secure_url,
+        cloudinaryId: result.public_id,
+        user: req.user.id, // add the user id to the post
+        username: req.user.name, // add the username to the post
+      });
+      console.log("Profile Picture has been added!");
+      res.redirect("/profile");
+    } catch (err) {
+      console.log(err);
+    }
+  }
 };
