@@ -5,7 +5,8 @@ const UserSchema = new mongoose.Schema({
   userName: { type: String, unique: true },
   email: { type: String, unique: true },
   password: String,
-  profilePic:{
+  profilePicture:{
+    // grab profile picture from profilepics collection from the datebase
     type: mongoose.Schema.Types.ObjectId,
     ref: "ProfilePic",
   }

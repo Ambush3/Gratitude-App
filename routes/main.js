@@ -10,6 +10,7 @@ const { ensureAuth} = require("../middleware/auth");
 //Main Routes - simplified for now
 router.get("/", homeController.getIndex);
 router.get("/profile", ensureAuth, postsController.getProfile);
+router.get("/profile", postsController.getProfilePic);
 router.get("/login", authController.getLogin);
 router.post("/login", authController.postLogin);
 router.get("/logout", authController.logout);
@@ -21,6 +22,5 @@ router.delete("/post/:id", postsController.deletePost);
 // router.post("/profile", postsController.getPostByDate);
 router.get("/daily-motivation", motivationController.getMotivation);
 router.get("/edit-profile", editProfileController.getEditProfile);
-
 
 module.exports = router;

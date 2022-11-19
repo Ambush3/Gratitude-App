@@ -1,7 +1,7 @@
 const cloudinary = require("../middleware/cloudinary");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
-const ProfilePic = require("../models/ProfilePic");
+const ProfilePicture = require("../models/ProfilePicture");
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -90,14 +90,23 @@ module.exports = {
       // Upload image to cloudinary
       const result = await cloudinary.uploader.upload(req.file.path);
 
-      await ProfilePic.create({
+      await ProfilePicture.create({
         image: result.secure_url,
         cloudinaryId: result.public_id,
-        user: req.user.id, // add the user id to the post
-        username: req.user.name, // add the username to the post
+        user: req.user.id, // add the user id to the picture
+        username: req.user.name, // add the username to the picture
       });
       console.log("Profile Picture has been added!");
       res.redirect("/profile");
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  getProfilePic: async (req, res) => {
+    try {
+      const profilePic = await ProfilePicture.find({ user: req.user.id }); // find all pictures by the current user id
+      res.render("profile.ejs", { profilePic: profilePic, user: req.user }); // render the profile page and pass the profile pictures and user data to it
+      console.log("Profile picture has been loaded")
     } catch (err) {
       console.log(err);
     }
