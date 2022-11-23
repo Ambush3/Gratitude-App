@@ -7,7 +7,10 @@ module.exports = {
   getProfile: async (req, res) => {
     try {
       const posts = await Post.find({ user: req.user.id }); // find all posts by the current user id
-      res.render("profile.ejs", { posts: posts, user: req.user }); // render the profile page and pass the posts and user data to it
+      const profilePic = await ProfilePicture.find({ user: req.user.id, profilePicture: req.user.profilePicture});
+      res.render("profile.ejs", { posts: posts, profilePic: profilePic, user: req.user }); // render the profile page and pass the posts and user data to it
+      // find profile pic by the current user id
+
     } catch (err) {
       console.log(err);
     }
@@ -33,7 +36,6 @@ module.exports = {
         caption: req.body.caption,
         likes: 0,
         user: req.user.id, // add the user id to the post
-        username: req.user.name, // add the username to the post
       });
       console.log("Post has been added!");
       res.redirect("/profile");
@@ -96,6 +98,7 @@ module.exports = {
         user: req.user.id, // add the user id to the picture
         username: req.user.name, // add the username to the picture
       });
+      console.log('image', result.secure_url);
       console.log("Profile Picture has been added!");
       res.redirect("/profile");
     } catch (err) {

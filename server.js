@@ -65,6 +65,8 @@ app.use("/profile", mainRoutes);
 app.use("/login", mainRoutes);
 app.use("/logout", mainRoutes);
 app.use("/signup", mainRoutes);
+app.use("/edit-profile", mainRoutes);
+
 
 
 //Server Running

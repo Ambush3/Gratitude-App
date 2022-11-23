@@ -5,15 +5,9 @@ const UserSchema = new mongoose.Schema({
   userName: { type: String, unique: true },
   email: { type: String, unique: true },
   password: String,
-  profilePicture:{
-    // grab profile picture from profilepics collection from the datebase
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "ProfilePic",
-  }
 });
 
 // Password hash middleware.
-
 UserSchema.pre("save", function save(next) {
   const user = this;
   if (!user.isModified("password")) {
