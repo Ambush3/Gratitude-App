@@ -4,12 +4,17 @@
         <!--      <div class="col-6">-->
         <!--          -->
         <!--      </div>-->
-        <div class="col-lg-6 col-md-8 col-sm-12">
-            <!-- pic that user uploaded when signing up shows here -->
-            <!-- show profile picture uploaded from current user logged in -->
-            <!-- match profilePic with users _id -->
-            <img src="<%= profilePic %>" alt="profile picture" class="img-fluid">
-            <h1 class="text-center">Hi <%= user.userName %></h1>
+        <div class="col-lg-6 col-md-8 col-sm-12 profile-header">
+            <!-- show profile pic image in img src -->
+            <!-- grab ProfilePic.image from createProfilePic -->
+            <div class="name-and-pic">
+                <div class="profilePictureImage">
+                    <% profilePic.forEach(function(profilePic) { %>
+                        <img src="<%= profilePic.image %>" class="img-fluid rounded-square" alt="profile pic">
+                    <% }) %>
+                </div>
+                <h1 class="userName">Hi <%= user.userName %></h1>
+            </div>
             <form action="/post/createPost" enctype="multipart/form-data" method="POST">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>

@@ -2,6 +2,7 @@ const cloudinary = require("../middleware/cloudinary");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 const ProfilePicture = require("../models/ProfilePicture");
+const User = require("../models/User");
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -37,6 +38,7 @@ module.exports = {
         likes: 0,
         user: req.user.id, // add the user id to the post
       });
+      console.log('image', result.secure_url);
       console.log("Post has been added!");
       res.redirect("/profile");
     } catch (err) {
@@ -58,6 +60,7 @@ module.exports = {
       console.log(err); // log the error
     }
   },
+
   deletePost: async (req, res) => {
     try {
       // Find post by id
@@ -90,26 +93,27 @@ module.exports = {
   createProfilePic: async (req, res) => {
     try {
       // Upload image to cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path);
+      const result = await cloudinary.uploader.upload(req.file.path); // upload the image to cloudinary using the path to the image
 
-      await ProfilePicture.create({
-        image: result.secure_url,
-        cloudinaryId: result.public_id,
+      await ProfilePicture.create({ // create a new profile picture using the ProfilePicture model and pass in the image, cloudinaryId and user id
+        image: result.secure_url, // add the image url to the post
+        cloudinaryId: result.public_id, // add the cloudinary id to the post
         user: req.user.id, // add the user id to the picture
         username: req.user.name, // add the username to the picture
       });
-      console.log('image', result.secure_url);
-      console.log("Profile Picture has been added!");
-      res.redirect("/profile");
+      console.log('image', result.secure_url); // log the image url to the console
+      console.log("Profile Picture has been added!"); // log a message to the console
+      res.redirect("/profile"); // redirect to the profile page
     } catch (err) {
       console.log(err);
     }
   },
   getProfilePic: async (req, res) => {
     try {
-      const profilePic = await ProfilePicture.find({ user: req.user.id }); // find all pictures by the current user id
-      res.render("profile.ejs", { profilePic: profilePic, user: req.user }); // render the profile page and pass the profile pictures and user data to it
-      console.log("Profile picture has been loaded")
+      const profilePic = await ProfilePicture.find({ user: req.user.id, profilePicture: req.user.profilePicture});
+      res.render("profile.ejs", { profilePic: profilePic, user: req.user }); // render the profile page and pass the posts and user data to it
+      // find profile pic by the current user id
+
     } catch (err) {
       console.log(err);
     }
