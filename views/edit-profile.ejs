@@ -1,9 +1,14 @@
-<div class="mt-3">
-    <div class="mb-3">
-        <label for="file" class="form-label">Profile Picture Upload</label>
-        <form action="/post/createProfilePic" enctype="multipart/form-data" method="POST">
-            <input type="file" class="form-control" id="imageUpload" name="file">
-            <button type="submit" class="btn btn-primary">Upload</button>
-        </form>
+<%- include('partials/header') -%>
+<div class="container">
+    <div class="edit-profile row justify-content-center">
+        <div class="mb-3 col-lg-4 col-md-6 col-sm-4">
+            <label for="file" class="form-label">Profile Picture Upload</label>
+            <form action="/post/createProfilePic" enctype="multipart/form-data" method="POST">
+                <input type="file" class="form-control" id="imageUpload" name="file">
+                <button type="submit" class="btn btn-primary mt-2">Upload</button>
+            </form>
+        </div>
     </div>
 </div>
+
+<%- include('partials/footer') -%>
