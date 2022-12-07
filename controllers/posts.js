@@ -101,6 +101,14 @@ module.exports = {
         user: req.user.id, // add the user id to the picture
         username: req.user.name, // add the username to the picture
       });
+
+      // if there are more than one profile picture, delete the oldest one
+      const profilePic = await ProfilePicture.find({ user: req.user.id }); // find all profile pictures by the current user id
+      if (profilePic.length > 1) { // if there are more than one profile picture
+        await cloudinary.uploader.destroy(profilePic[0].cloudinaryId); // delete the image from cloudinary using the cloudinaryId
+        await ProfilePicture.remove({ _id: profilePic[0]._id }); // delete the profile picture from the database
+      }
+
       console.log('image', result.secure_url); // log the image url to the console
       console.log("Profile Picture has been added!"); // log a message to the console
       res.redirect("/profile"); // redirect to the profile page
