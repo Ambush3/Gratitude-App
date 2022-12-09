@@ -1,6 +1,7 @@
 # About the project
 Gratitude App is an App I made where users can sign up, login, and upload a gratitude daily. 
 You can also upload images for your post, which are uploaded to cloudinary.  
+You can change your profile picture, and change password.
 
 Currently working on:
 1. Users can get an email that will send them a gratitude via email that they may have posted   
