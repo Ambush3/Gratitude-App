@@ -27,3 +27,4 @@ in the past
 # Run
 
 `npm start`
+`nodemon server.js`
