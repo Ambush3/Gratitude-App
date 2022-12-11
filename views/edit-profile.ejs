@@ -9,17 +9,59 @@
             </form>
             <label for="email" class="mt-4 form-label">Change Password</label>
             <form role="form" method="POST" action="/edit-profile">
-                <div class="input-group">
-                    <label for="newPassword">
-                        <input class="form-control" id="newPassword" name="newPassword" value="" placeholder="Enter the New Password"
-                            type="password">
-                    </label>
-                </div>
-                <div class="pull-right">
-                    <button type="submit" name="Submit" value="Save" class="mt-2 btn btn-danger"><i class="livicon" data-n="pen" data-s="16"
-                            data-c="#fff" data-hc="0"></i> Save</button>
-                    <button type="reset" name="Reset" value="Clear" class="mt-2 btn btn-primary"><i class="livicon" data-n="trash"
-                            data-s="16" data-c="#fff" data-hc="0"></i> Clear</button>
+                <div class="box box-primary">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <!-- /.input group -->
+                        <div class="mb-3 justify-content-center">
+                            <div class="">
+                                <label>Old Password</label>
+                            </div>
+                            <div class="">
+                                <div class="input-group">
+                                    <label for="oldPassword"></label><input class="form-control" id="oldPassword" name="oldPassword"
+                                        value="" placeholder="Enter the Old Password" type="password">
+                                </div>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                        <div class="mb-3 row justify-content-center">
+                            <div class="">
+                                <label>New Password</label>
+                            </div>
+                            <div class="">
+                                <div class="input-group">
+                                    <label for="newPassword"></label><input class="form-control" id="newPassword" name="newPassword"
+                                        value="" placeholder="Enter the New Password" type="password">
+                                </div>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                        <div class="mb-3 row justify-content-center">
+                            <div class="">
+                                <label>Confirm Password</label>
+                            </div>
+                            <div class="">
+                                <div class="input-group">
+                                    <label for="confirmPassword"></label><input class="form-control" id="confirmPassword"
+                                        name="confirmPassword" value="" placeholder="Re-enter the New Password" type="password">
+                                </div>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                        <div class="box-header">
+                            <div class="mb-3 row justify-content-center">
+                                <div class="">
+                                    <div class="pull-right">
+                                        <button type="submit" name="Submit" value="Save" class="btn btn-danger"><i class="livicon"
+                                                data-n="pen" data-s="16" data-c="#fff" data-hc="0"></i> Save</button>
+                                        <button type="reset" name="Reset" value="Clear" class="btn btn-primary"><i class="livicon"
+                                                data-n="trash" data-s="16" data-c="#fff" data-hc="0"></i> Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
             
