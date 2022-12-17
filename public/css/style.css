@@ -182,6 +182,12 @@ h1 a {
     flex-wrap: wrap;
 }
 
+
+/* edit profile page */
 .edit-profile {
     margin-top: 5em;
+}
+
+.clear-btn {
+    background-color: white;
 }

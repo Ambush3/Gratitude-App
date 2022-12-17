@@ -116,40 +116,55 @@ exports.postForgotPassword = (req, res, next) => {
     });
 }
 
-exports.changePassword = (req, res, next) => {
-    const validationErrors = [];
-    if (validator.isEmpty(req.body.password))
-        validationErrors.push({ msg: "Password cannot be blank." });
-    if (validator.isEmpty(req.body.confirmPassword))
-        validationErrors.push({ msg: "Confirm Password cannot be blank." });
-    if (req.body.password !== req.body.confirmPassword)
-        validationErrors.push({ msg: "Passwords do not match" });
+// exports.changePassword = (req, res, next) => {
+//   // doesnt require entering an email address
+//   // only old password, new password, and confirm password
+//   const validationErrors = [];
+//   if (validator.isEmpty(req.body.oldPassword))
+//     validationErrors.push({ msg: "Old Password cannot be blank." });
+//   if (!validator.isLength(req.body.newPassword, { min: 8 }))
+//     validationErrors.push({
+//       msg: "New Password must be at least 8 characters long",
+//     });
+//   if (req.body.newPassword !== req.body.confirmPassword)
+//     validationErrors.push({ msg: "Passwords do not match" });
 
-    if (validationErrors.length) {
-        req.flash("errors", validationErrors);
-        return res.redirect("/edit-profile");
-    }
-    req.body.email = validator.normalizeEmail(req.body.email, {
-        gmail_remove_dots: false,
-    });
-    const email = req.body.email;
-    const newPassword = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
-    User.findOne ({ email: email }, (err, user) => {
-        if (err) {
-            return next(err);
-        }
-        user.password = newPassword;
-        user.save((err) => {
-            if (err) {
-                return next(err);
-            }
-            req.flash("success", { msg: "Success! Your password has been changed." });
-            res.redirect("/edit-profile");
-        });
-    });
+//   if (validationErrors.length) {
+//     req.flash("errors", validationErrors);
+//     return res.redirect("../edit-profile");
+//   } 
+//   const oldPassword = req.body.oldPassword;
+//   const newPassword = req.body.newPassword;
+//   const confirmPassword = req.body.confirmPassword;
+//   User.findOne({ email: req.user.email }, (err, user) => {
+//     if (err) {
+//       return next(err);
+//     }
+//     if (!user) {
+//       req.flash("errors", { msg: "Account with that email address does not exist." });
+//       return res.redirect("../edit-profile");
+//     }
+//     bcrypt.compare(oldPassword, user.password, (err, isMatch) => {
+//       if (err) {
+//         return next(err);
+//       }
+//       if (isMatch) {
+//         user.password = newPassword;
+//         user.save((err) => {
+//           if (err) {
+//             return next(err);
+//           }
+//           req.flash("success", { msg: "Success! Your password has been changed." });
+//           res.redirect("/edit-profile");
+//         });
+//       } else {
+//         req.flash("errors", { msg: "Incorrect password." });
+//         return res.redirect("../edit-profile");
+//       }
+//     });
+//   });
 
-}
+// }
 
 
 exports.postSignup = (req, res, next) => {
