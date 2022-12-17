@@ -1,7 +1,7 @@
 body, html {
     overflow-x: hidden;
 }
-
+/* header */
 .header-container {
     display: grid;
     grid-template-columns: minmax(200px, 300px) minmax(400px, 500px) minmax(200px, 300px);
@@ -112,6 +112,8 @@ h1 a {
     display: none;
 }
 
+
+/* mobile */
 @media screen and (max-width: 768px) {
     .menu__box {
         width: 150px
@@ -132,6 +134,7 @@ h1 a {
     }
 }
 
+/* motivation page */
 .motivational-quote {
     display: flex;
     justify-content: center;
@@ -159,14 +162,24 @@ h1 a {
     height: 10em;
 }
 
+
+/* profile page */
 .name-and-pic {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 
 .userName {
-    padding-left: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: .25em;
+}
+
+.profilePictureImage {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .edit-profile {
