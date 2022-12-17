@@ -22,5 +22,4 @@ router.delete("/post/:id", postsController.deletePost);
 // router.post("/profile", postsController.getPostByDate);
 router.get("/daily-motivation", motivationController.getMotivation);
 router.get("/edit-profile", editProfileController.getEditProfile);
-router.post("/edit-profile", authController.changePassword);
 module.exports = router;
