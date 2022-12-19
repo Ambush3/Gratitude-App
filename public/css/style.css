@@ -16,8 +16,13 @@ body, html {
 
 h1 a {
     text-decoration: none;
-    color: #000;
+    /* color: #000; */
 }
+
+.gratitudeTitle{
+    color:rgb(31, 125, 252)
+}
+
 
 .gratitude-center {
     grid-column: 2;
