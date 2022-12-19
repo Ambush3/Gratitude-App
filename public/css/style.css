@@ -132,6 +132,22 @@ h1 a {
         margin-top: 4em;
         margin-bottom: 1em;
     }
+    .index-login-container {
+        margin-top: 4em;
+        padding: 0 1.5em 0 1.5em;
+    }
+    .login-container {
+        margin-top: 2em;
+        padding: 0 1.5em 0 1.5em;
+    }
+    .forgot-password-form {
+        margin-top: 5em;
+        padding: 0 1.5em 0 1.5em;
+    }
+    .signup-form {
+        margin-top: 2em;
+        padding: 0 1.5em 0 1.5em;
+    }
 }
 
 /* motivation page */
