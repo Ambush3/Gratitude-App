@@ -19,6 +19,8 @@ router.post("/signup", authController.postSignup);
 router.get("/forgot-password", authController.getForgotPassword);
 router.post("/forgot-password", authController.postForgotPassword);
 router.delete("/post/:id", postsController.deletePost);
+// router.post("/savePost/:id", postsController.savePost);
+// router.get("/save-post", postsController.getSavedPosts); TODO: // work on this route
 // router.post("/profile", postsController.getPostByDate);
 router.get("/daily-motivation", motivationController.getMotivation);
 router.get("/edit-profile", editProfileController.getEditProfile);

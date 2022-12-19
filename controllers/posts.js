@@ -74,6 +74,21 @@ module.exports = {
       res.redirect("/profile");
     }
   },
+    
+  // savePost to a collection of saved posts to be viewed later
+  // savePost: async (req, res) => {
+  //   try {
+  //     // Find post by id
+  //     let post = await Post.findById({ _id: req.params.id }); // find the post by its id and store it in the post variable
+      
+  //     // Save post to db
+  //     await Post.save({ _id: req.params.id });  // Save post to db
+  //     console.log("Saved Post");
+  //     res.redirect("/profile"); // redirect to the profile page
+  //   } catch (err) {
+  //     res.redirect("/profile");
+  //   }
+  // },
 
   logout: async (req, res) => {
       req.logout();
