@@ -2,7 +2,7 @@
 
 <main class="login-container">
   <div class="row justify-content-center">
-    <section class="col-lg-6 col-md-8 col-sm-10 mt-5">
+    <section class="col-lg-2 col-md-8 col-sm-10 mt-5">
       <% if (locals.messages.errors) { %> <% messages.errors.forEach( el => { %>
       <div class="alert alert-danger"><%= el.msg %></div>
       <% }) %> <% } %> <% if (locals.messages.info) { %> <%
@@ -34,7 +34,7 @@
         <div class="col justify-content-around">
           <button type="submit" class="btn btn-primary">Submit</button>
           <!--Forget password? button -->
-          <a href="/forgot-password" class="btn btn-primary">Forgot password</a>
+          <a href="/forgot-password" class="btn btn-secondary">Forgot password</a>
         </div>
       </form>
     </section>
