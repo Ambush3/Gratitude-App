@@ -155,6 +155,33 @@ h1 a {
     }
 }
 
+/* Login Page */
+.forgotPasswordLink {
+    color: rgb(126, 126, 126);
+}
+
+.submitAndForgotPasswordContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.submitAndForgotPassword {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.loginSubmitBtn {
+    width: 100%;
+    margin: 1em 0 .5em 0;
+}
+
+
+
 /* motivation page */
 .motivational-quote {
     display: flex;

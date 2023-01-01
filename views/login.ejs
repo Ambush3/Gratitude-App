@@ -10,7 +10,7 @@
       <div class="alert alert-info"><%= el.msg %></div>
       <% }) %> <% } %>
       <form action="/login" method="POST">
-        <div class="mb-3">
+        <div class="mb-2">
           <label for="exampleInputEmail1" class="form-label"
             >Email address</label
           >
@@ -22,7 +22,7 @@
             name="email"
           />
         </div>
-        <div class="mb-3">
+        <div class="">
           <label for="exampleInputPassword1" class="form-label">Password</label>
           <input
             type="password"
@@ -31,11 +31,12 @@
             name="password"
           />
         </div>
-        <div class="col justify-content-around">
-          <button type="submit" class="btn btn-primary">Submit</button>
-          <!--Forget password? button -->
-          <a href="/forgot-password" class="btn btn-secondary">Forgot password</a>
-        </div>
+        <section class="submitAndForgotPasswordContainer">
+          <div class="submitAndForgotPassword">
+            <button type="submit" class="loginSubmitBtn btn btn-primary">Submit</button>
+            <a href="/forgot-password" class="forgotPasswordLink">Forgot password</a>
+          </div>
+        </section>
       </form>
     </section>
   </div>
