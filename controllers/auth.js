@@ -6,6 +6,8 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const env = require("dotenv").config();
 
+const sendMailPassword = process.env.NODEMAIL_PASS;
+
 exports.getLogin = (req, res) => {
   if (req.user) {
     return res.redirect("/profile");
@@ -119,7 +121,7 @@ exports.postForgotPassword = (req, res, next) => {
                   service: "gmail",
                   auth: {
                       user: 'aaronbush3@gmail.com',
-                      pass: `${process.env.NODEMAIL_PASS}`,
+                    pass: '{sendMailPassword}',
                   }
             });
             transporter.sendMail({
