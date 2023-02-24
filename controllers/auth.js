@@ -1,6 +1,9 @@
 const passport = require("passport");
 const validator = require("validator");
-const User = require("../models/User");
+const User = require("../models/User")
+const mongoose = require("mongoose");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 exports.getLogin = (req, res) => {
   if (req.user) {
@@ -76,12 +79,9 @@ exports.getForgotPassword = (req, res) => {
 
 
 exports.postForgotPassword = (req, res, next) => {
-    // using bcrypt and salt, match email from #email in forgot-password.ejs and find email
-    // in database then change password from newPassword input
     const validationErrors = [];
-    if (!validator.isEmail(req.body.email)){
+    if (!validator.isEmail(req.body.email))
         validationErrors.push({ msg: "Please enter a valid email address." });
-    }
     if (validationErrors.length) {
         req.flash("errors", validationErrors);
         return res.redirect("../forgot-password");
@@ -90,81 +90,114 @@ exports.postForgotPassword = (req, res, next) => {
         gmail_remove_dots: false,
     });
     const email = req.body.email;
-    const newPassword = req.body.newPassword;
-    const confirmPassword = req.body.confirmPassword;
-    if (newPassword !== confirmPassword){
-        req.flash("errors", { msg: "Passwords do not match" });
-        return res.redirect("../forgot-password");
-    }
-    User.findOne({ email: email }, (err, user) => {
+
+
+
+    crypto.randomBytes(32, (err, buffer) => {
         if (err) {
-            return next(err);
-        }
-        if (!user) {
-            req.flash("errors", { msg: "Account with that email address does not exist." });
+            console.log(err);
             return res.redirect("../forgot-password");
         }
-        user.password = newPassword;
-        user.save((err) => {
-            if (err) {
-                return next(err);
+        const token = buffer.toString("hex");
+
+      
+    User.findOne({ email: email })
+        .then((user) => {
+            if (!user) {
+                req.flash("errors", { msg: "No account with that email address exists." });
+                return res.redirect("../forgot-password");
             }
-            req.flash("success", { msg: "Success! Your password has been changed." });
-            res.redirect("/");
+            user.resetToken = token;
+            user.resetTokenExpiration = Date.now() + 3600000;
+            return user.save();
+        })
+        .then((result) => {
+            res.redirect("../login");
+          // fix Error: Missing credentials for "PLAIN"
+            const transporter = nodemailer.createTransport({
+                  service: "gmail",
+                  auth: {
+                      user: 'aaronbush3@gmail.com',
+                      pass: 'nwgbqysnnzeymfmc',
+                  }
+            });
+            transporter.sendMail({
+                to: email,
+                from: "your email",
+                subject: "Password Reset",
+                html: `
+                    <p>You requested a password reset</p>
+                    <p>Click this <a href="https://seal-app-rnsi4.ondigitalocean.app/reset-password/${token}">link</a> to set a new password.</p>
+                `,
+            });
+        })
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
-
     });
-}
+};
 
-// exports.changePassword = (req, res, next) => {
-//   // doesnt require entering an email address
-//   // only old password, new password, and confirm password
-//   const validationErrors = [];
-//   if (validator.isEmpty(req.body.oldPassword))
-//     validationErrors.push({ msg: "Old Password cannot be blank." });
-//   if (!validator.isLength(req.body.newPassword, { min: 8 }))
-//     validationErrors.push({
-//       msg: "New Password must be at least 8 characters long",
-//     });
-//   if (req.body.newPassword !== req.body.confirmPassword)
-//     validationErrors.push({ msg: "Passwords do not match" });
+exports.getResetPassword = (req, res) => {
+    const token = req.params.token;
+    User.findOne({
+        resetToken: token,
+        resetTokenExpiration: { $gt: Date.now() },
+    })
+        .then((user) => {
+            let message = req.flash("error");
+            if (message.length > 0) {
+                message = message[0];
+            } else {
+                message = null;
+            }
+            res.render("reset-password", {
+                title: "Reset Password",
+                path: "/reset-password",
+                errorMessage: message,
+                userId: user._id.toString(),
+                passwordToken: token,
+            });
+        })
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
 
-//   if (validationErrors.length) {
-//     req.flash("errors", validationErrors);
-//     return res.redirect("../edit-profile");
-//   } 
-//   const oldPassword = req.body.oldPassword;
-//   const newPassword = req.body.newPassword;
-//   const confirmPassword = req.body.confirmPassword;
-//   User.findOne({ email: req.user.email }, (err, user) => {
-//     if (err) {
-//       return next(err);
-//     }
-//     if (!user) {
-//       req.flash("errors", { msg: "Account with that email address does not exist." });
-//       return res.redirect("../edit-profile");
-//     }
-//     bcrypt.compare(oldPassword, user.password, (err, isMatch) => {
-//       if (err) {
-//         return next(err);
-//       }
-//       if (isMatch) {
-//         user.password = newPassword;
-//         user.save((err) => {
-//           if (err) {
-//             return next(err);
-//           }
-//           req.flash("success", { msg: "Success! Your password has been changed." });
-//           res.redirect("/edit-profile");
-//         });
-//       } else {
-//         req.flash("errors", { msg: "Incorrect password." });
-//         return res.redirect("../edit-profile");
-//       }
-//     });
-//   });
+exports.postResetPassword = (req, res) => {
+    const newPassword = req.body.password;
+    const userId = req.body.userId;
+    const passwordToken = req.body.passwordToken;
+    let resetUser;
 
-// }
+    User.findOne({
+        resetToken: passwordToken,
+        resetTokenExpiration: { $gt: Date.now() },
+        _id: userId,
+    })
+        .then((user) => {
+            resetUser = user; 
+            return bcrypt.hash(newPassword, 12);
+        })
+        .then((hashedPassword) => {
+            resetUser.password = hashedPassword;
+            resetUser.resetToken = undefined;
+            resetUser.resetTokenExpiration = undefined;
+            return resetUser.save();
+        })
+        .then((result) => {
+            res.redirect("../login");
+        })
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
 
 
 exports.postSignup = (req, res, next) => {
