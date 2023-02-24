@@ -127,7 +127,7 @@ exports.postForgotPassword = (req, res, next) => {
                 from: "your email",
                 subject: "Password Reset",
                 html: `
-                    <p>You requested a password reset</p>
+                    <p>You requested a password reset from Gratitude App</p>
                     <p>Click this <a href="https://seal-app-rnsi4.ondigitalocean.app/reset-password/${token}">link</a> to set a new password.</p>
                 `,
             });
