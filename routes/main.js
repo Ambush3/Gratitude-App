@@ -18,6 +18,7 @@ router.get("/signup", authController.getSignup);
 router.post("/signup", authController.postSignup);
 router.get("/forgot-password", authController.getForgotPassword);
 router.post("/forgot-password", authController.postForgotPassword);
+router.get("/reset-password/:token", authController.getResetPassword);
 router.delete("/post/:id", postsController.deletePost);
 // router.post("/savePost/:id", postsController.savePost);
 // router.get("/save-post", postsController.getSavedPosts); TODO: // work on this route

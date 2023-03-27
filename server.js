@@ -60,6 +60,7 @@ app.use("/", mainRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
 app.use("/forgot-password", mainRoutes);
+app.use("/reset-password", mainRoutes);
 app.use("/daily-motivation", mainRoutes);
 app.use("/profile", mainRoutes);
 app.use("/login", mainRoutes);
