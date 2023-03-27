@@ -162,6 +162,7 @@ exports.getResetPassword = (req, res, next) => {
                 errorMessage: message,
                 // userId: user._id.toString(),
                 passwordToken: token,
+                token: token,
             });
         })
         .catch((err) => {
