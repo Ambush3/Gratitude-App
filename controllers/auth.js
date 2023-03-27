@@ -143,34 +143,33 @@ exports.postForgotPassword = (req, res, next) => {
     });
 };
 
-exports.getResetPassword = (req, res, next) => {
-    const token = req.params.token;
-    User.findOne({
-        resetToken: token,
-        resetTokenExpiration: { $gt: Date.now() },
+exports.getResetPassword = (req, res) => {
+  const token = req.params.token;
+  User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() },
+  })
+    .then((user) => {
+      let message = req.flash("error");
+      if (message.length > 0) {
+        message = message[0];
+      } else {
+        message = null;
+      }
+      res.render("reset-password", {
+        title: "Reset Password",
+        path: "../reset-password",
+        errorMessage: message,
+        passwordToken: token, // Pass the token variable to the view
+      });
     })
-        .then((user) => {
-            let message = req.flash("error");
-            if (message.length > 0) {
-                message = message[0];
-            } else {
-                message = null;
-            }
-            res.render("reset-password", {
-                title: "Reset Password",
-                path: "../reset-password",
-                errorMessage: message,
-                // userId: user._id.toString(),
-                passwordToken: token,
-                token: token,
-            });
-        })
-        .catch((err) => {
-            const error = new Error(err);
-            error.httpStatusCode = 500;
-            // return next(error);
-        });
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      // return next(error);
+    });
 };
+
 
 exports.postResetPassword = (req, res, next) => {
   const newPassword = req.body.password;
