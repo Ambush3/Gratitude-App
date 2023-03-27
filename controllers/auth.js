@@ -160,7 +160,7 @@ exports.getResetPassword = (req, res, next) => {
                 title: "Reset Password",
                 path: "../reset-password",
                 errorMessage: message,
-                userId: user._id.toString(),
+                // userId: user._id.toString(),
                 passwordToken: token,
             });
         })
