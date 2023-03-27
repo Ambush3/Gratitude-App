@@ -143,7 +143,7 @@ exports.postForgotPassword = (req, res, next) => {
     });
 };
 
-exports.getResetPassword = (req, res) => {
+exports.getResetPassword = (req, res, next) => {
     const token = req.params.token;
     User.findOne({
         resetToken: token,
