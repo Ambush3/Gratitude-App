@@ -122,8 +122,8 @@ exports.postForgotPassword = (req, res, next) => {
                   service: "gmail",
                   auth: {
                     user: 'aaronbush3@gmail.com',
-                    pass: '{sendMailPassword}',
-                    // pass: 'bbizwfczispjhjkb'
+                    // pass: '{sendMailPassword}',
+                    pass: 'bbizwfczispjhjkb'
                   }
             });
             transporter.sendMail({
