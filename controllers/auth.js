@@ -160,7 +160,7 @@ exports.getResetPassword = (req, res) => {
         title: "Reset Password",
         path: "../reset-password",
         errorMessage: message,
-        passwordToken: token, // Pass the token variable to the view
+        token: token, // Pass the token variable to the view
       });
     })
     .catch((err) => {
