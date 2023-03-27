@@ -176,21 +176,17 @@ exports.postResetPassword = (req, res, next) => {
   const passwordConfirm = req.body.passwordConfirm;
   const token = req.body.token;
 
-  if (newPassword !== passwordConfirm) {
-    req.flash("errors", { msg: "Passwords do not match." });
-    return res.redirect(`/auth/reset-password/${token}`);
-  }
-
   let resetUser;
-  User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+
+  User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() },
+  })
     .then((user) => {
-      if (!user) {
-        req.flash("errors", { msg: "Password reset token is invalid or has expired." });
-        return res.redirect("/auth/forgot-password");
-      }
       resetUser = user;
       return bcrypt.hash(newPassword, 12);
-    })
+    }
+    )
     .then((hashedPassword) => {
       resetUser.password = hashedPassword;
       resetUser.resetToken = undefined;
@@ -198,13 +194,12 @@ exports.postResetPassword = (req, res, next) => {
       return resetUser.save();
     })
     .then((result) => {
-      req.flash("success", { msg: "Your password has been reset successfully." });
-      res.redirect("/auth/login");
+      res.redirect("../login");
     })
     .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      return next(error);
+      // return next(error);
     });
 };
 
