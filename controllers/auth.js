@@ -117,7 +117,6 @@ exports.postForgotPassword = (req, res, next) => {
         })
         .then((result) => {
             res.redirect("../login");
-          // fix Error: Missing credentials for "PLAIN"
             const transporter = nodemailer.createTransport({
                   service: "gmail",
                   auth: {
@@ -159,7 +158,7 @@ exports.getResetPassword = (req, res) => {
             }
             res.render("reset-password", {
                 title: "Reset Password",
-                path: "/reset-password",
+                path: "../reset-password",
                 errorMessage: message,
                 userId: user._id.toString(),
                 passwordToken: token,
@@ -172,37 +171,42 @@ exports.getResetPassword = (req, res) => {
         });
 };
 
-exports.postResetPassword = (req, res) => {
-    const newPassword = req.body.password;
-    const userId = req.body.userId;
-    const passwordToken = req.body.passwordToken;
-    let resetUser;
+exports.postResetPassword = (req, res, next) => {
+  const newPassword = req.body.password;
+  const passwordConfirm = req.body.passwordConfirm;
+  const token = req.body.token;
 
-    User.findOne({
-        resetToken: passwordToken,
-        resetTokenExpiration: { $gt: Date.now() },
-        _id: userId,
+  if (newPassword !== passwordConfirm) {
+    req.flash("errors", { msg: "Passwords do not match." });
+    return res.redirect(`/auth/reset-password/${token}`);
+  }
+
+  let resetUser;
+  User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+    .then((user) => {
+      if (!user) {
+        req.flash("errors", { msg: "Password reset token is invalid or has expired." });
+        return res.redirect("/auth/forgot-password");
+      }
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12);
     })
-        .then((user) => {
-            resetUser = user; 
-            return bcrypt.hash(newPassword, 12);
-        })
-        .then((hashedPassword) => {
-            resetUser.password = hashedPassword;
-            resetUser.resetToken = undefined;
-            resetUser.resetTokenExpiration = undefined;
-            return resetUser.save();
-        })
-        .then((result) => {
-            res.redirect("../login");
-        })
-        .catch((err) => {
-            const error = new Error(err);
-            error.httpStatusCode = 500;
-            return next(error);
-        });
+    .then((hashedPassword) => {
+      resetUser.password = hashedPassword;
+      resetUser.resetToken = undefined;
+      resetUser.resetTokenExpiration = undefined;
+      return resetUser.save();
+    })
+    .then((result) => {
+      req.flash("success", { msg: "Your password has been reset successfully." });
+      res.redirect("/auth/login");
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
-
 
 
 exports.postSignup = (req, res, next) => {
