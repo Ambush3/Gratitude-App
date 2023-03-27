@@ -11,6 +11,7 @@ const connectDB = require("./config/database");
 const mainRoutes = require("./routes/main");
 const postRoutes = require("./routes/posts");
 const commentRoutes = require("./routes/comments");
+const authRoutes = require("./routes/auth");
 
 //Use .env file in config folder
 require("dotenv").config({ path: "./config/.env" });
@@ -67,6 +68,7 @@ app.use("/login", mainRoutes);
 app.use("/logout", mainRoutes);
 app.use("/signup", mainRoutes);
 app.use("/edit-profile", mainRoutes);
+app.use("/auth", authRoutes);
 
 
 //Server Running
