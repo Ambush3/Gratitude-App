@@ -172,28 +172,32 @@ exports.getResetPassword = (req, res) => {
 
 
 exports.postResetPassword = async (req, res, next) => {
-  try { 
-    const token = req.params.token;
-    const newPassword = req.body.password;
-    const user = await User.findOne({
-      resetToken: token,
-      resetTokenExpiration: { $gt: Date.now() },
+  // take the password from the reset-password body and hash it
+  const newPassword = req.body.password;
+  const token = req.body.token;
+  let resetUser;
+  User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() },
+  })
+    .then((user) => {
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12);
+    })
+    .then((hashedPassword) => {
+      resetUser.password = hashedPassword;
+      resetUser.resetToken = undefined;
+      resetUser.resetTokenExpiration = undefined;
+      return resetUser.save();
+    })
+    .then((result) => {
+      res.redirect("../login");
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
-    if (!user) {
-      req.flash("error", "Invalid token. Please try again.");
-      return res.redirect("../reset-password");
-    }
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
-    user.password = hashedPassword;
-    user.resetToken = undefined;
-    user.resetTokenExpiration = undefined;
-    await user.save();
-    res.redirect("../login");
-  } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
-  }
 };
 
 
