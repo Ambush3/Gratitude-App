@@ -4,7 +4,7 @@ const User = require("../models/User")
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const env = require("dotenv").config();
 
 const sendMailPassword = process.env.NODEMAIL_PASS;
