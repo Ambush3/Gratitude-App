@@ -90,7 +90,7 @@ exports.postResetPassword = (req, res, next) => {
 
   if (newPassword !== passwordConfirm) {
     req.flash("errors", { msg: "Passwords do not match." });
-    return res.redirect(`/auth/reset-password/${token}`);
+    return res.redirect(`/reset-password/${token}`);
   }
 
   let resetUser;
@@ -98,7 +98,7 @@ exports.postResetPassword = (req, res, next) => {
     .then((user) => {
       if (!user) {
         req.flash("errors", { msg: "Password reset token is invalid or has expired." });
-        return res.redirect("/auth/forgot-password");
+        return res.redirect("/forgot-password");
       }
       resetUser = user;
       return bcrypt.hash(newPassword, 12);
@@ -111,13 +111,13 @@ exports.postResetPassword = (req, res, next) => {
         return resetUser.save();
       } else {
         req.flash("errors", { msg: "An error occurred while resetting your password. Please try again." });
-        return res.redirect("/auth/forgot-password");
+        return res.redirect("/forgot-password");
         // return Promise.reject(new Error("An error occurred while resetting your password."));
       }
     })
     .then((result) => {
       req.flash("success", { msg: "Your password has been reset successfully." });
-      res.redirect("/auth/login");
+      res.redirect("/login");
     })
     .catch((err) => {
       const error = new Error(err);
