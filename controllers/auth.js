@@ -172,35 +172,23 @@ exports.getResetPassword = (req, res) => {
 
 
 exports.postResetPassword = async (req, res, next) => {
-  try {
+  try { 
+    const token = req.params.token;
     const newPassword = req.body.password;
-    const passwordConfirm = req.body.passwordConfirm;
-    const token = req.body.token;
-
-    if (newPassword !== passwordConfirm) {
-      req.flash("errors", { msg: "Passwords do not match." });
-      return res.redirect(`/reset-password/${token}`);
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiration: { $gt: Date.now() },
+    });
+    if (!user) {
+      req.flash("error", "Invalid token. Please try again.");
+      return res.redirect("../reset-password");
     }
-
-    let resetUser = await User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } });
-
-    if (!resetUser) {
-      console.log("Token:", token);
-      console.log("Reset token expiration:", resetUser.resetTokenExpiration);
-      console.log("Current time:", Date.now());
-      req.flash("errors", { msg: "Password reset token is invalid or has expired." });
-      return res.redirect("/forgot-password");
-    }
-
-
     const hashedPassword = await bcrypt.hash(newPassword, 12);
-    resetUser.password = hashedPassword;
-    resetUser.resetToken = undefined;
-    resetUser.resetTokenExpiration = undefined;
-    await resetUser.save();
-
-    req.flash("success", { msg: "Your password has been reset successfully." });
-    res.redirect("/login");
+    user.password = hashedPassword;
+    user.resetToken = undefined;
+    user.resetTokenExpiration = undefined;
+    await user.save();
+    res.redirect("../login");
   } catch (err) {
     const error = new Error(err);
     error.httpStatusCode = 500;
