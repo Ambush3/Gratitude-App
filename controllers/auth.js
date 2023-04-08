@@ -7,9 +7,6 @@ const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const env = require("dotenv").config();
 
-const sendMailPassword = process.env.NODEMAIL_PASS;
-console.log('this is the password', sendMailPassword)
-
 exports.getLogin = (req, res) => {
   if (req.user) {
     return res.redirect("/profile");
@@ -114,6 +111,8 @@ exports.postForgotPassword = (req, res, next) => {
             }
             user.resetToken = token;
             user.resetTokenExpiration = Date.now() + 3600000;
+            console.log('this is the token', token);
+            console.log('this is the user', user);
             return user.save();
         })
         .then((result) => {
@@ -122,8 +121,7 @@ exports.postForgotPassword = (req, res, next) => {
                   service: "gmail",
                   auth: {
                     user: 'aaronbush3@gmail.com',
-                    // pass: '{sendMailPassword}',
-                    pass: 'bbizwfczispjhjkb'
+                    pass: process.env.NODEMAIL_PASS
                   }
             });
             transporter.sendMail({
@@ -132,7 +130,7 @@ exports.postForgotPassword = (req, res, next) => {
                 subject: "Password Reset",
                 html: `
                     <p>You requested a password reset from Gratitude App</p>
-                    <p>Click this <a href="https://seal-app-rnsi4.ondigitalocean.app/reset-password/${token}">link</a> to set a new password.</p>
+                    <p> click this <a href="${process.env.HOST_SITE}/reset-password/${token}">link</a> to set a new password.</p>
                 `,
             });
         })
@@ -171,6 +169,8 @@ exports.getResetPassword = (req, res) => {
     });
 };
 
+// TODO: Need to check if the token is being sent to the database or not 
+// See if its the same token on the database
 
 exports.postResetPassword = async (req, res, next) => {
   const newPassword = req.body.password;
