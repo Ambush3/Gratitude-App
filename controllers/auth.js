@@ -83,6 +83,95 @@ exports.getForgotPassword = (req, res) => {
 };
 
 
+exports.postForgotPassword = (req, res, next) => {
+    const validationErrors = [];
+    if (!validator.isEmail(req.body.email))
+        validationErrors.push({ msg: "Please enter a valid email address." });
+    if (validationErrors.length) {
+        req.flash("errors", validationErrors);
+        return res.redirect("../forgot-password");
+    }
+    req.body.email = validator.normalizeEmail(req.body.email, {
+        gmail_remove_dots: false,
+    });
+    const email = req.body.email;
+
+
+
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            console.log(err);
+            return res.redirect("../forgot-password");
+        }
+        const token = buffer.toString("hex");
+
+      
+    User.findOne({ email: email })
+        .then((user) => {
+            if (!user) {
+                req.flash("errors", { msg: "No account with that email address exists." });
+                return res.redirect("../forgot-password");
+            }
+            user.resetToken = token;
+            user.resetTokenExpiration = Date.now() + 3600000;
+            return user.save();
+        })
+        .then((result) => {
+            res.redirect("../login");
+            const transporter = nodemailer.createTransport({
+                  service: "gmail",
+                  auth: {
+                    user: 'aaronbush3@gmail.com',
+                    // pass: '{sendMailPassword}',
+                    pass: 'bbizwfczispjhjkb'
+                  }
+            });
+            transporter.sendMail({
+                to: email,
+                from: "your email",
+                subject: "Password Reset",
+                html: `
+                    <p>You requested a password reset from Gratitude App</p>
+                    <p>Click this <a href="https://seal-app-rnsi4.ondigitalocean.app/reset-password/${token}">link</a> to set a new password.</p>
+                `,
+            });
+        })
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+    });
+};
+
+exports.getResetPassword = (req, res) => {
+  const token = req.params.token;
+  User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() },
+  })
+    .then((user) => {
+      let message = req.flash("error");
+      if (message.length > 0) {
+        message = message[0];
+      } else {
+        message = null;
+      }
+      res.render("reset-password", {
+        title: "Reset Password",
+        path: "../reset-password",
+        errorMessage: message,
+        token: token, // Pass the token variable to the view
+      });
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      // return next(error);
+    });
+};
+
+
 exports.postResetPassword = (req, res, next) => {
   const newPassword = req.body.password;
   const passwordConfirm = req.body.passwordConfirm;
@@ -90,7 +179,7 @@ exports.postResetPassword = (req, res, next) => {
 
   if (newPassword !== passwordConfirm) {
     req.flash("errors", { msg: "Passwords do not match." });
-    return res.redirect(`/reset-password/${token}`);
+    return res.redirect(`/auth/reset-password/${token}`);
   }
 
   let resetUser;
@@ -98,7 +187,7 @@ exports.postResetPassword = (req, res, next) => {
     .then((user) => {
       if (!user) {
         req.flash("errors", { msg: "Password reset token is invalid or has expired." });
-        return res.redirect("/forgot-password");
+        return res.redirect("/auth/forgot-password");
       }
       resetUser = user;
       return bcrypt.hash(newPassword, 12);
@@ -111,13 +200,12 @@ exports.postResetPassword = (req, res, next) => {
         return resetUser.save();
       } else {
         req.flash("errors", { msg: "An error occurred while resetting your password. Please try again." });
-        return res.redirect("/forgot-password");
-        // return Promise.reject(new Error("An error occurred while resetting your password."));
+        return Promise.reject(new Error("An error occurred while resetting your password."));
       }
     })
     .then((result) => {
       req.flash("success", { msg: "Your password has been reset successfully." });
-      res.redirect("/login");
+      res.redirect("/auth/login");
     })
     .catch((err) => {
       const error = new Error(err);
@@ -125,7 +213,6 @@ exports.postResetPassword = (req, res, next) => {
       return next(error);
     });
 };
-
 
 
 exports.postSignup = (req, res, next) => {
