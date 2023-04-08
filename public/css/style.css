@@ -232,8 +232,10 @@ h1 a {
 
 
 /* edit profile page */
-.edit-profile {
-    margin-top: 5em;
+@media screen and (max-width: 768px) {
+    .edit-profile {
+        margin-top: 5em;
+    }
 }
 
 .clear-btn {
