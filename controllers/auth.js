@@ -179,14 +179,14 @@ exports.postResetPassword = async (req, res, next) => {
 
     if (newPassword !== passwordConfirm) {
       req.flash("errors", { msg: "Passwords do not match." });
-      return res.redirect(`/auth/reset-password/${token}`);
+      return res.redirect(`/reset-password/${token}`);
     }
 
     let resetUser = await User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } });
 
     if (!resetUser) {
       req.flash("errors", { msg: "Password reset token is invalid or has expired." });
-      return res.redirect("/auth/forgot-password");
+      return res.redirect("/forgot-password");
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
@@ -196,7 +196,7 @@ exports.postResetPassword = async (req, res, next) => {
     await resetUser.save();
 
     req.flash("success", { msg: "Your password has been reset successfully." });
-    res.redirect("/auth/login");
+    res.redirect("/login");
   } catch (err) {
     const error = new Error(err);
     error.httpStatusCode = 500;
