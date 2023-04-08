@@ -1,7 +1,8 @@
 const passport = require("passport");
 const validator = require("validator");
 const User = require("../models/User")
-const mongoose = require("mongoose");
+// TODO: See if I need this 
+// const mongoose = require("mongoose");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const env = require("dotenv").config();
@@ -192,10 +193,16 @@ exports.postResetPassword = (req, res, next) => {
       return bcrypt.hash(newPassword, 12);
     })
     .then((hashedPassword) => {
-      resetUser.password = hashedPassword;
-      resetUser.resetToken = undefined;
-      resetUser.resetTokenExpiration = undefined;
-      return resetUser.save();
+      // Add a check for resetUser before setting its properties
+      if (resetUser) {
+        resetUser.password = hashedPassword;
+        resetUser.resetToken = undefined;
+        resetUser.resetTokenExpiration = undefined;
+        return resetUser.save();
+      } else {
+        req.flash("errors", { msg: "An error occurred while resetting your password. Please try again." });
+        return res.redirect("/auth/forgot-password");
+      }
     })
     .then((result) => {
       req.flash("success", { msg: "Your password has been reset successfully." });
