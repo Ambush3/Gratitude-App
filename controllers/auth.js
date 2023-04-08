@@ -185,9 +185,13 @@ exports.postResetPassword = async (req, res, next) => {
     let resetUser = await User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } });
 
     if (!resetUser) {
+      console.log("Token:", token);
+      console.log("Reset token expiration:", resetUser.resetTokenExpiration);
+      console.log("Current time:", Date.now());
       req.flash("errors", { msg: "Password reset token is invalid or has expired." });
       return res.redirect("/forgot-password");
     }
+
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
     resetUser.password = hashedPassword;
