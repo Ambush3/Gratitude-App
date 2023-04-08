@@ -1,8 +1,7 @@
 const passport = require("passport");
 const validator = require("validator");
 const User = require("../models/User")
-// TODO: See if I need this 
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const env = require("dotenv").config();
@@ -200,7 +199,8 @@ exports.postResetPassword = (req, res, next) => {
         return resetUser.save();
       } else {
         req.flash("errors", { msg: "An error occurred while resetting your password. Please try again." });
-        return Promise.reject(new Error("An error occurred while resetting your password."));
+        return res.redirect("/auth/forgot-password");
+        // return Promise.reject(new Error("An error occurred while resetting your password."));
       }
     })
     .then((result) => {
@@ -213,6 +213,7 @@ exports.postResetPassword = (req, res, next) => {
       return next(error);
     });
 };
+
 
 
 exports.postSignup = (req, res, next) => {
