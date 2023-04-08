@@ -171,46 +171,29 @@ exports.getResetPassword = (req, res) => {
 };
 
 
-exports.postResetPassword = (req, res, next) => {
-  const newPassword = req.body.password;
-  const passwordConfirm = req.body.passwordConfirm;
-  const token = req.body.token;
-
-  if (newPassword !== passwordConfirm) {
-    req.flash("errors", { msg: "Passwords do not match." });
-    return res.redirect(`/auth/reset-password/${token}`);
-  }
-
-  let resetUser;
-  User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
-    .then((user) => {
-      if (!user) {
-        req.flash("errors", { msg: "Password reset token is invalid or has expired." });
-        return res.redirect("/auth/forgot-password");
-      }
-      resetUser = user;
-      return bcrypt.hash(newPassword, 12);
-    })
-    .then((hashedPassword) => {
-      if (resetUser) {
-        resetUser.password = hashedPassword;
-        resetUser.resetToken = undefined;
-        resetUser.resetTokenExpiration = undefined;
-        return resetUser.save();
-      } else {
-        req.flash("errors", { msg: "An error occurred while resetting your password. Please try again." });
-        return Promise.reject(new Error("An error occurred while resetting your password."));
-      }
-    })
-    .then((result) => {
-      req.flash("success", { msg: "Your password has been reset successfully." });
-      res.redirect("/auth/login");
-    })
-    .catch((err) => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+exports.postResetPassword = async (req, res, next) => {
+  try {
+    const token = req.params.token;
+    const newPassword = req.body.password;
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiration: { $gt: Date.now() },
     });
+    if (!user) {
+      req.flash("error", "Invalid token, please try again.");
+      return res.redirect("../reset-password");
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    user.password = hashedPassword;
+    user.resetToken = undefined;
+    user.resetTokenExpiration = undefined;
+    await user.save();
+    res.redirect("../login");
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  }
 };
 
 
