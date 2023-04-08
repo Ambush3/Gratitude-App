@@ -173,7 +173,6 @@ exports.getResetPassword = (req, res) => {
 
 
 exports.postResetPassword = async (req, res, next) => {
-  // take the password from the reset-password body and hash it
   const newPassword = req.body.password;
   const token = req.body.token;
   let resetUser;
@@ -182,6 +181,11 @@ exports.postResetPassword = async (req, res, next) => {
     resetTokenExpiration: { $gt: Date.now() },
   })
     .then((user) => {
+      if (!user) {
+        const error = new Error("Password reset token is invalid or has expired.");
+        error.httpStatusCode = 400;
+        throw error;
+      }
       resetUser = user;
       return bcrypt.hash(newPassword, 12);
     })
