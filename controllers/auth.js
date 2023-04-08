@@ -193,7 +193,6 @@ exports.postResetPassword = (req, res, next) => {
       return bcrypt.hash(newPassword, 12);
     })
     .then((hashedPassword) => {
-      // Add a check for resetUser before setting its properties
       if (resetUser) {
         resetUser.password = hashedPassword;
         resetUser.resetToken = undefined;
@@ -201,7 +200,7 @@ exports.postResetPassword = (req, res, next) => {
         return resetUser.save();
       } else {
         req.flash("errors", { msg: "An error occurred while resetting your password. Please try again." });
-        return res.redirect("/auth/forgot-password");
+        return Promise.reject(new Error("An error occurred while resetting your password."));
       }
     })
     .then((result) => {
