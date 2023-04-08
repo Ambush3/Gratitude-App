@@ -1,7 +1,6 @@
 const passport = require("passport");
 const validator = require("validator");
 const User = require("../models/User")
-const mongoose = require("mongoose");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
@@ -17,37 +16,27 @@ exports.getLogin = (req, res) => {
 };
 
 exports.postLogin = (req, res, next) => {
-  const validationErrors = [];
-  if (!validator.isEmail(req.body.email))
-    validationErrors.push({ msg: "Please enter a valid email address." });
-  if (validator.isEmpty(req.body.password))
-    validationErrors.push({ msg: "Password cannot be blank." });
+    const email = req.body.email;
+    const password = req.body.password;
 
-  if (validationErrors.length) {
-    req.flash("errors", validationErrors);
-    return res.redirect("/login");
-  }
-  req.body.email = validator.normalizeEmail(req.body.email, {
-    gmail_remove_dots: false,
-  });
-
-  passport.authenticate("local", (err, user, info) => { // passport.authenticate() is a middleware that authenticates the user
-    if (err) {
-      return next(err);
-    }
-    if (!user) { // if user is not found
-      req.flash("errors", info);
-      return res.redirect("/login");
-    }
-    req.logIn(user, (err) => { // req.logIn() is a method that logs in the user
-      if (err) {
-        return next(err);
-      }
-      req.flash("success", { msg: "Success! You are logged in." });
-      res.redirect(req.session.returnTo || "/profile"); // redirect to profile page
-    });
-  })(req, res, next);
+    passport.authenticate("local", (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            req.flash("errors", info);
+            return res.redirect("../login");
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            req.flash("success", { msg: "Success! You are logged in." });
+            res.redirect("../profile");
+        });
+    })(req, res, next);
 };
+
 
 exports.logout = (req, res) => {
   req.logout(() => {
@@ -79,7 +68,6 @@ exports.getForgotPassword = (req, res) => {
   });
 };
 
-
 exports.postForgotPassword = (req, res, next) => {
     const validationErrors = [];
     if (!validator.isEmail(req.body.email))
@@ -93,8 +81,6 @@ exports.postForgotPassword = (req, res, next) => {
     });
     const email = req.body.email;
 
-
-
     crypto.randomBytes(32, (err, buffer) => {
         if (err) {
             console.log(err);
@@ -105,12 +91,13 @@ exports.postForgotPassword = (req, res, next) => {
       
     User.findOne({ email: email })
         .then((user) => {
+          console.log('this is the user in postForgotPassword', user);
             if (!user) {
                 req.flash("errors", { msg: "No account with that email address exists." });
                 return res.redirect("../forgot-password");
             }
             user.resetToken = token;
-            user.resetTokenExpiration = Date.now() + 3600000;
+            user.resetTokenExpiration = Date.now() + 3600000; // 1 hour 
             console.log('this is the token', token);
             console.log('this is the user', user);
             return user.save();
@@ -165,12 +152,8 @@ exports.getResetPassword = (req, res) => {
     .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      // return next(error);
     });
 };
-
-// TODO: Need to check if the token is being sent to the database or not 
-// See if its the same token on the database
 
 exports.postResetPassword = async (req, res, next) => {
   const newPassword = req.body.password;
@@ -191,9 +174,13 @@ exports.postResetPassword = async (req, res, next) => {
     })
     .then((hashedPassword) => {
       resetUser.password = hashedPassword;
+      console.log('this is the reset users password', resetUser.password);
       resetUser.resetToken = undefined;
       resetUser.resetTokenExpiration = undefined;
-      return resetUser.save();
+      console.log('this is the reset user', resetUser);
+        return resetUser.save().then((updatedUser) => {
+            console.log("Updated user:", updatedUser);
+        });
     })
     .then((result) => {
       res.redirect("../login");
