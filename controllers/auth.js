@@ -199,8 +199,7 @@ exports.postResetPassword = (req, res, next) => {
         return resetUser.save();
       } else {
         req.flash("errors", { msg: "An error occurred while resetting your password. Please try again." });
-        return res.redirect("/auth/forgot-password");
-        // return Promise.reject(new Error("An error occurred while resetting your password."));
+        return Promise.reject(new Error("An error occurred while resetting your password."));
       }
     })
     .then((result) => {
