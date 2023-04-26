@@ -2,6 +2,18 @@
 <div class="container">
     <div class="edit-profile row justify-content-center">
         <div class="mb-3 col-lg-4 col-md-6 col-sm-4 mt-3">
+            <% if (typeof errorMessage !=='undefined' ) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= errorMessage %>
+                </div>
+            <% } %>
+            <% if (messages.success) { %>
+                <% messages.success.forEach(function(message) { %>
+                    <div class="alert alert-success" role="alert">
+                        <%= message.msg %>
+                    </div>
+                <% }) %>
+            <% } %>
             <!-- <label for="file" class="form-label">Profile Picture Upload</label> -->
             <h3 class="">Upload Profile Picture</h3>
             <form action="/post/createProfilePic" enctype="multipart/form-data" method="POST">
@@ -9,17 +21,13 @@
                 <button type="submit" class="btn btn-primary mt-2">Upload</button>
             </form>
             <div class="mt-5 row justify-content-center">
-                <% if (typeof errorMessage !=='undefined' ) { %>
-                    <div class="alert alert-danger" role="alert">
-                        <%= errorMessage %>
-                    </div>
-                <% } %>
+                
             </div>
             <h3 class="mt-1">Change Password</h3>
             <form role="form" method="POST" action="/change-password">
                 <div class="box box-primary">
                     <div class="box-body">
-                        <div class="mb-3 row justify-content-center">
+                        <div class="mb-2 row justify-content-center">
                                 <label for="email" class="form-label">
                                     Email address
                                 </label>
@@ -27,14 +35,14 @@
                                     <input type="email" class="form-control" id="email" name="email"/>
                                 </div>
                         </div>
-                        <div class="mb-3 row justify-content-center">
+                        <div class="mb-2 row justify-content-center">
                                 <label>Old Password</label>
                                     <div class="input-group">
                                     <label for="oldPassword"></label><input class="form-control" id="oldPassword" name="oldPassword"
                                     value=""  type="password">
                             </div>
                         </div>
-                        <div class="mb-3 row justify-content-center">
+                        <div class="mb-2 row justify-content-center">
                                 <label>New Password</label>
                                 <div class="input-group">
                                     <label for="newPassword"></label><input class="form-control" id="newPassword" name="newPassword"
@@ -63,7 +71,32 @@
                     </div>
                 </div>
             </form>
-            
+            <!-- Form to be able to change username -->
+            <h3 class="mt-5">Change Username</h3>
+            <form role="form" method="POST" action="/edit-profile/change-username">
+                <div class="box box-primary">
+                    <div class="box-body">
+                        <div class="mb-2 row justify-content-center">
+                            <label for="username" class="form-label">
+                                Username
+                            </label>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <input type="text" class="form-control" id="username" name="username"/>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="box-header">
+                        <div class="mb-3 row">
+                            <div class="col-xs-12 col-sm-3 col-md-8 col-lg-8">
+                                <div class="pull-right">
+                                    <button type="submit" name="Submit" value="Save" class="btn btn-primary"><i class="livicon"
+                                            data-n="pen" data-s="16" data-c="#fff" data-hc="0"></i> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

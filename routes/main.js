@@ -25,5 +25,7 @@ router.delete("/post/:id", postsController.deletePost);
 // router.get("/save-post", postsController.getSavedPosts); TODO: // work on this route
 // router.post("/profile", postsController.getPostByDate);
 router.get("/daily-motivation", motivationController.getMotivation);
-router.get("/edit-profile", editProfileController.getEditProfile);
+router.get("/edit-profile", ensureAuth, editProfileController.getEditProfile);
+router.post("/edit-profile/change-username", ensureAuth, editProfileController.postChangeUsername);
+
 module.exports = router;

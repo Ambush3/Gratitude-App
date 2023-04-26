@@ -63,9 +63,7 @@ module.exports = {
 
   deletePost: async (req, res) => {
     try {
-      // Find post by id
       let post = await Post.findById({ _id: req.params.id }); // find the post by its id and store it in the post variable
-      // Delete image from cloudinary
       await cloudinary.uploader.destroy(post.cloudinaryId); // delete the image from cloudinary using the cloudinaryId
       await Post.remove({ _id: req.params.id });  // Delete post from db
       console.log("Deleted Post");
@@ -110,7 +108,6 @@ module.exports = {
       if(!req.file) {
         return res.render("edit-profile.ejs", { msg: "Please select an image to upload", user: req.user });
       }
-      // Upload image to cloudinary
       const result = await cloudinary.uploader.upload(req.file.path); // upload the image to cloudinary using the path to the image
 
       await ProfilePicture.create({ // create a new profile picture using the ProfilePicture model and pass in the image, cloudinaryId and user id
