@@ -121,7 +121,7 @@ h1 a {
 /* mobile */
 @media screen and (max-width: 768px) {
     .menu__box {
-        width: 150px
+        width: 200px;
     }
     .header-container {
         position: fixed;
