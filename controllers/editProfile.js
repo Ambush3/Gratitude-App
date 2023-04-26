@@ -14,11 +14,6 @@ module.exports = {
         });
     },
 
-    // Get current logged in users information
-    // Find that user in the database
-    // Update the user's information
-    // Redirect to the edit-profile page
-
     postChangeUsername: async (req, res, next) => {
         const validationErrors = [];
         if (!validator.isLength(req.body.username, { min: 3, max: 20 })) {
