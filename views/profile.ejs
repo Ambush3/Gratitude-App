@@ -53,8 +53,7 @@
                             <h5 class="card-title"><%= post.title %></h5>
                             <p class="card-text"><%= post.caption %></p>
                             <img src="<%= post.image %>" class="card-img-top" alt="...">
-                            <p class="card-text"><small class="text-muted"><%= post.createdAt.toISOString().slice(0, 10) %></small></p>
-                            <!-- Delete button -->
+                            <p class="card-text"><small class="text-muted"><%= post.createdAt.toLocaleDateString() %></small></p>
                             <form action="/post/<%= post._id %>?_method=DELETE" method="POST">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button>
                             </form>
