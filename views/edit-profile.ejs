@@ -8,11 +8,16 @@
                 <input type="file" class="form-control" id="imageUpload" name="file">
                 <button type="submit" class="btn btn-primary mt-2">Upload</button>
             </form>
-            <h3 class="mt-5">Change Password</h3>
-            <!-- <label for="email" class="mt-4 form-label">Change Password</label> -->
+            <div class="mt-5 row justify-content-center">
+                <% if (typeof errorMessage !=='undefined' ) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= errorMessage %>
+                    </div>
+                <% } %>
+            </div>
+            <h3 class="mt-1">Change Password</h3>
             <form role="form" method="POST" action="/change-password">
                 <div class="box box-primary">
-                    <!-- /.box-header -->
                     <div class="box-body">
                         <div class="mb-3 row justify-content-center">
                                 <label for="email" class="form-label">

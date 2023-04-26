@@ -241,3 +241,7 @@ h1 a {
 .clear-btn {
     background-color: white;
 }
+
+.alert-danger {
+    width: 21em;
+}

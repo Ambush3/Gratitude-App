@@ -196,15 +196,12 @@ exports.postChangePassword = async (req, res, next) => {
   const newPassword = req.body.newPassword;
   const oldPassword = req.body.oldPassword;
   const userId = req.user._id;
+  const email = req.body.email;
 
-  console.log('this is the user id', userId);
-  console.log('this is the new password', newPassword);
-  console.log('this is the old password', oldPassword);
-
-  if (!newPassword || !oldPassword) {
-    const error = new Error("Both old and new passwords are required.");
-    error.httpStatusCode = 400;
-    return next(error);
+  if (!newPassword || !oldPassword || !email) {
+    return res.status(400).render("edit-profile", {
+      errorMessage: "All fields are required.",
+    });
   }
 
   let resetUser;
