@@ -2,9 +2,16 @@
 <div class="container">
     <div class="edit-profile row justify-content-center">
         <div class="mb-3 col-lg-4 col-md-6 col-sm-4 mt-3">
-            <% if (typeof errorMessage !=='undefined' ) { %>
+            <% if (typeof errorMessage !== 'undefined') { %>
                 <div class="alert alert-danger" role="alert">
                     <%= errorMessage %>
+                </div>
+            <% } %>
+            <% if (messages.errors) { %>
+                <div class="alert alert-danger" role="alert">
+                    <% messages.errors.forEach(function(error) { %>
+                        <div><%= error.msg %></div>
+                    <% }) %>
                 </div>
             <% } %>
             <% if (messages.success) { %>

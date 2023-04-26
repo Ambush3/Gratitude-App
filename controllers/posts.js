@@ -105,32 +105,33 @@ module.exports = {
 
   createProfilePic: async (req, res) => {
     try {
-      if(!req.file) {
-        return res.render("edit-profile.ejs", { msg: "Please select an image to upload", user: req.user });
+      if (!req.file) {
+        req.flash("errors", { msg: "Please select an image to upload." });
+        return res.redirect("/edit-profile");
       }
-      const result = await cloudinary.uploader.upload(req.file.path); // upload the image to cloudinary using the path to the image
+      const result = await cloudinary.uploader.upload(req.file.path);
 
-      await ProfilePicture.create({ // create a new profile picture using the ProfilePicture model and pass in the image, cloudinaryId and user id
-        image: result.secure_url, // add the image url to the post
-        cloudinaryId: result.public_id, // add the cloudinary id to the post
-        user: req.user.id, // add the user id to the picture
-        username: req.user.name, // add the username to the picture
+      await ProfilePicture.create({
+        image: result.secure_url,
+        cloudinaryId: result.public_id,
+        user: req.user.id,
+        username: req.user.name,
       });
 
-      // if there are more than one profile picture, delete the oldest one
-      const profilePic = await ProfilePicture.find({ user: req.user.id }); // find all profile pictures by the current user id
-      if (profilePic.length > 1) { // if there are more than one profile picture
-        await cloudinary.uploader.destroy(profilePic[0].cloudinaryId); // delete the image from cloudinary using the cloudinaryId
-        await ProfilePicture.remove({ _id: profilePic[0]._id }); // delete the profile picture from the database
+      const profilePic = await ProfilePicture.find({ user: req.user.id });
+      if (profilePic.length > 1) {
+        await cloudinary.uploader.destroy(profilePic[0].cloudinaryId);
+        await ProfilePicture.remove({ _id: profilePic[0]._id });
       }
 
-      console.log('image', result.secure_url); // log the image url to the console
-      console.log("Profile Picture has been added!"); // log a message to the console
-      res.redirect("/profile"); // redirect to the profile page
+      console.log('image', result.secure_url);
+      console.log("Profile Picture has been added!");
+      res.redirect("/profile");
     } catch (err) {
       console.log(err);
     }
   },
+
   getProfilePic: async (req, res) => {
     try {
       const profilePic = await ProfilePicture.find({ user: req.user.id, profilePicture: req.user.profilePicture});

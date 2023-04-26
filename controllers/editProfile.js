@@ -24,6 +24,9 @@ module.exports = {
         if (!validator.isLength(req.body.username, { min: 3, max: 20 })) {
             validationErrors.push({ msg: "Username must be between 3 and 20 characters long." });
         }
+        if (!req.body.username) {
+            validationErrors.push({ msg: "Username is required." });
+        }
         if (validationErrors.length) {
             req.flash("errors", validationErrors);
             return res.redirect("/edit-profile");
@@ -31,14 +34,6 @@ module.exports = {
 
         const newUserName = req.body.username;
         const userId = req.user._id;
-
-        console.log('this is the new user name', newUserName);
-
-        if (!newUserName) {
-            return res.status(400).render("edit-profile", {
-                errorMessage: "All fields are required.",
-            });
-        }
 
         let existingUser;
         try {
@@ -68,5 +63,6 @@ module.exports = {
             return next(error);
         }
     },
+
 };
 
