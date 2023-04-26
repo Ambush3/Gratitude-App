@@ -192,6 +192,57 @@ exports.postResetPassword = async (req, res, next) => {
     });
 };
 
+exports.postChangePassword = async (req, res, next) => {
+  const newPassword = req.body.newPassword;
+  const oldPassword = req.body.oldPassword;
+  const userId = req.user._id;
+
+  console.log('this is the user id', userId);
+  console.log('this is the new password', newPassword);
+  console.log('this is the old password', oldPassword);
+
+  if (!newPassword || !oldPassword) {
+    const error = new Error("Both old and new passwords are required.");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+
+  let resetUser;
+  User.findOne({
+    _id: userId,
+  })
+    .then((user) => {
+      if (!user) {
+        const error = new Error("User not found.");
+        error.httpStatusCode = 400;
+        throw error;
+      }
+      resetUser = user;
+      return bcrypt.compare(oldPassword, user.password);
+    })
+    .then((isMatch) => {
+      if (!isMatch) {
+        const error = new Error("Old password is incorrect.");
+        error.httpStatusCode = 400;
+        throw error;
+      }
+      return bcrypt.hash(newPassword, 12);
+    })
+    .then((hashedPassword) => {
+      resetUser.password = hashedPassword;
+      return resetUser.save().then((updatedUser) => {
+        console.log("Updated user:", updatedUser);
+      });
+    })
+    .then((result) => {
+      res.redirect("../login");
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
 
 
 exports.postSignup = (req, res, next) => {
