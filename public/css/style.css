@@ -182,7 +182,7 @@ h1 a {
 
 
 
-/* motivation page */
+/* Motivation page */
 .motivational-quote {
     display: flex;
     justify-content: center;
@@ -211,7 +211,7 @@ h1 a {
 }
 
 
-/* profile page */
+/* Profile Page */
 .name-and-pic {
     display: flex;
     justify-content: center;
@@ -230,8 +230,15 @@ h1 a {
     flex-wrap: wrap;
 }
 
+.profilePictureImage img {
+    width: 10em;
+    height: 10em;
+    /* border-radius: 50%; */
+    margin: 0 auto;
+    display: block;
+    object-fit: cover;
+}
 
-/* edit profile page */
 @media screen and (max-width: 768px) {
     .edit-profile {
         margin-top: 5em;
