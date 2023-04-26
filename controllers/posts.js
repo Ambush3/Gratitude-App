@@ -107,6 +107,9 @@ module.exports = {
 
   createProfilePic: async (req, res) => {
     try {
+      if(!req.file) {
+        return res.render("edit-profile.ejs", { msg: "Please select an image to upload", user: req.user });
+      }
       // Upload image to cloudinary
       const result = await cloudinary.uploader.upload(req.file.path); // upload the image to cloudinary using the path to the image
 
