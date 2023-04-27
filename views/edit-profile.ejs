@@ -88,22 +88,43 @@
                                 Username
                             </label>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <input type="text" class="form-control" id="username" name="username"/>
-                            </div> 
+                                <input type="text" class="form-control" id="username" name="username" />
+                            </div>
                         </div>
                     </div>
                     <div class="box-header">
                         <div class="mb-3 row">
                             <div class="col-xs-12 col-sm-3 col-md-8 col-lg-8">
                                 <div class="pull-right">
-                                    <button type="submit" name="Submit" value="Save" class="btn btn-primary"><i class="livicon"
-                                            data-n="pen" data-s="16" data-c="#fff" data-hc="0"></i> Save</button>
+                                    <button type="button" name="Submit" value="Save" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#changeUsernameModal">
+                                        <i class="livicon" data-n="pen" data-s="16" data-c="#fff" data-hc="0"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="changeUsernameModal" tabindex="-1" aria-labelledby="changeUsernameModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="changeUsernameModalLabel">Change Username</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to change your username?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Yes, Change Username</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
