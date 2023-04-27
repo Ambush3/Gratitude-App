@@ -50,15 +50,24 @@
   integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/a1Cf2akJeKMTwrvxlW2yBPAYYzJdN8NfqaVn9J" crossorigin="anonymous"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const menuToggle = document.getElementById("menu__toggle");
-        const menuBox = document.getElementById("menuBox");
+      const menuToggle = document.getElementById("menu__toggle");
+      const menuBtn = document.querySelector(".menu__btn");
+      const menuBox = document.getElementById("menuBox");
 
-        document.addEventListener("click", function (event) {
-          if (!menuBox.contains(event.target) && !menuToggle.contains(event.target)) {
-            menuToggle.checked = false;
-          }
-        });
+      document.addEventListener("click", function (event) {
+        if (!menuBox.contains(event.target) && !menuToggle.contains(event.target) && menuToggle.checked) {
+          menuToggle.checked = false;
+        }
       });
-  </script>  
+
+      menuBtn.addEventListener("click", function (event) {
+        if (menuToggle.checked) {
+          setTimeout(() => {
+            menuToggle.checked = false;
+          }, 0);
+        }
+      });
+    });
+  </script>
   </body>
 </html>
