@@ -37,7 +37,7 @@
           <span></span>
         </label>
 
-        <ul class="menu__box">
+        <ul class="menu__box" id="menuBox">
           <li><a class="menu__item" href="/profile">Profile</a></li>
           <li><a class="menu__item" href="/edit-profile">Edit Profile</a></li>
           <li><a class="menu__item" href="/daily-motivation">Daily Motivation</a></li>
@@ -47,6 +47,18 @@
       </div>
     </header>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/a1Cf2akJeKMTwrvxlW2yBPAYYzJdN8NfqaVn9J" crossorigin="anonymous"></script>  
+  integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/a1Cf2akJeKMTwrvxlW2yBPAYYzJdN8NfqaVn9J" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.getElementById("menu__toggle");
+        const menuBox = document.getElementById("menuBox");
+
+        document.addEventListener("click", function (event) {
+          if (!menuBox.contains(event.target) && !menuToggle.contains(event.target)) {
+            menuToggle.checked = false;
+          }
+        });
+      });
+  </script>  
   </body>
 </html>
