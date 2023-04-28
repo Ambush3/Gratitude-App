@@ -129,6 +129,7 @@ h1 a {
         left: 0;
         width: 100%;
         height: 60px;
+        background-color: rgb(255, 255, 255);
         color:rgb(31, 125, 252);
         z-index: 1;
     }
