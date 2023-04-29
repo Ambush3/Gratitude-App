@@ -15,21 +15,79 @@
                 </div>
                 <h1 class="userName">Hi <%= user.userName %></h1>
             </div>
-            <form action="/post/createPost" enctype="multipart/form-data" method="POST">
-                <div class="mb-3">
-                    <label for="title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="title" name="title">
-                    <div class="mb-3 mt-3">
+            <!-- <form action="/post/createPost" enctype="multipart/form-data" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
                         <label for="caption" class="form-label">What are you grateful for today?</label>
                         <textarea class="form-control" id="caption" name="caption"></textarea>
                     </div>
                     <div class="mb-2">
-                        <label for="imgUpload" class="form-label">Image Upload</label>
-                        <input type="file" class="form-control" id="imageUpload" name="file">
+                        <label for="imageUpload" class="form-label">Image Upload</label>
+                        <button type="button" class="form-control btn btn-primary"
+                            onclick="document.getElementById('imageUpload').click()">Upload File</button>
+                        <input type="file" class="form-control d-none" id="imageUpload" name="file">
+                        <span id="fileName"></span>
                     </div>
-                    <button type="submit" class="btn btn-primary" value="Upload">Submit</button>
-            </form>
-        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form> -->
+
+            <div class="mb-2 d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gratitudeModal">
+                    Add Content
+                </button>
+            </div>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="gratitudeModal" tabindex="-1" aria-labelledby="gratitudeModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="gratitudeModalLabel">Add Content</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/post/createPost" method="POST" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="title" name="title">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="caption" class="form-label">What are you grateful for today?</label>
+                                    <textarea class="form-control" id="caption" name="caption"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="addImage" class="form-label">Add Image</label>
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('imageUpload').click()">
+                                            Add Image
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger d-none" id="removeImage" onclick="removeImage()">
+                                            Remove Image
+                                        </button>
+                                        <input type="file" class="form-control d-none" id="imageUpload" name="file" onchange="handleFileSelect(event)">
+                                        <span class="input-group-text d-none" id="selectedFile"></span>
+                                    </div>
+                                </div>
+                                <div class="img-preview d-none">
+                                    <img id="preview" src="#" alt="Selected Image" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <!-- Create a way for user to choose date on date picker widget -->
         <!-- Let user click on date picker widget to show post/posts from that date-->
 

@@ -259,3 +259,18 @@ h1 a {
 .alert-danger {
     width: 21em;
 }
+
+.img-preview {
+    margin-top: 0.5rem;
+}
+
+.img-preview img {
+    max-height: 8rem;
+}
+
+.input-group .input-group-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
