@@ -25,24 +25,51 @@ module.exports = {
       console.log(err);
     }
   },
+  // createPost: async (req, res) => {
+  //   try {
+  //     // Upload image to cloudinary
+  //     const result = await cloudinary.uploader.upload(req.file.path);
+
+  //     await Post.create({
+  //       title: req.body.title,
+  //       image: result.secure_url,
+  //       cloudinaryId: result.public_id,
+  //       caption: req.body.caption,
+  //       likes: 0,
+  //       user: req.user.id, // add the user id to the post
+  //     });
+  //     console.log('image', result.secure_url);
+  //     console.log("Post has been added!");
+  //     res.redirect("/profile");
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // },
   createPost: async (req, res) => {
     try {
-      // Upload image to cloudinary
+      // check if image is uploaded
+      if (!req.file) {
+        return res.status(400).send("Please upload an image");
+      }
+
+      // upload image to cloudinary
       const result = await cloudinary.uploader.upload(req.file.path);
 
+      // create a new post in the database
       await Post.create({
         title: req.body.title,
-        image: result.secure_url,
-        cloudinaryId: result.public_id,
         caption: req.body.caption,
+        image: result.secure_url, // use the secure URL returned by cloudinary
+        cloudinaryId: result.public_id, // save the public id returned by cloudinary
+        user: req.user.id,
         likes: 0,
-        user: req.user.id, // add the user id to the post
       });
-      console.log('image', result.secure_url);
+
       console.log("Post has been added!");
       res.redirect("/profile");
     } catch (err) {
       console.log(err);
+      res.status(500).send("Internal server error");
     }
   },
 
