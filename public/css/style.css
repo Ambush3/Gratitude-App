@@ -274,3 +274,24 @@ h1 a {
     white-space: nowrap;
     flex: 1;
 }
+
+.card-header,
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h5 {
+    margin-bottom: 0;
+}
+
+.card-header p {
+    margin-bottom: 0;
+    font-size: 0.8rem;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+}
