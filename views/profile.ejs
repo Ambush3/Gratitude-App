@@ -15,37 +15,19 @@
                 </div>
                 <h1 class="userName">Hi <%= user.userName %></h1>
             </div>
-            <!-- <form action="/post/createPost" enctype="multipart/form-data" method="POST">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" name="title">
-                    </div>
-                    <div class="mb-3">
-                        <label for="caption" class="form-label">What are you grateful for today?</label>
-                        <textarea class="form-control" id="caption" name="caption"></textarea>
-                    </div>
-                    <div class="mb-2">
-                        <label for="imageUpload" class="form-label">Image Upload</label>
-                        <button type="button" class="form-control btn btn-primary"
-                            onclick="document.getElementById('imageUpload').click()">Upload File</button>
-                        <input type="file" class="form-control d-none" id="imageUpload" name="file">
-                        <span id="fileName"></span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form> -->
-
             <div class="mb-2 d-flex justify-content-center">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gratitudeModal">
-                    Add Content
-                </button>
+                <div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gratitudeModal">
+                        Add Content
+                    </button>
+                </div>
+                <div class="ms-3 mt-1">
+                    <a href="/edit-profile">
+                        <i class="fa-solid fa-gear fa-xl"></i>
+                    </a>
+                </div>
             </div>
-            
-            <!-- Modal -->
+
             <div class="modal fade" id="gratitudeModal" tabindex="-1" aria-labelledby="gratitudeModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
