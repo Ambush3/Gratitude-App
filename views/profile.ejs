@@ -1,12 +1,7 @@
 <%- include('partials/header') -%>
 <div class="container">
     <div class="row mt-5 justify-content-center">
-        <!--      <div class="col-6">-->
-        <!--          -->
-        <!--      </div>-->
         <div class="col-lg-4 col-md-4 col-sm-8 profile-header">
-            <!-- show profile pic image in img src -->
-            <!-- grab ProfilePic.image from createProfilePic -->
             <div class="name-and-pic">
                 <div class="profilePictureImage">
                     <% profilePic.forEach(function(profilePic) { %>
@@ -22,12 +17,11 @@
                     </button>
                 </div>
                 <div class="ms-3 mt-1">
-                    <a href="/edit-profile">
+                    <a href="/edit-profile" data-bs-toggle="tooltip" title="Edit Profile">
                         <i class="fa-solid fa-gear fa-xl"></i>
                     </a>
                 </div>
             </div>
-
             <div class="modal fade" id="gratitudeModal" tabindex="-1" aria-labelledby="gratitudeModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -46,7 +40,6 @@
                                     <textarea class="form-control" id="caption" name="caption"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <!-- <label for="addImage" class="form-label">Add Image</label> -->
                                     <div class="input-group">
                                         <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('imageUpload').click()">
                                             Add Image
