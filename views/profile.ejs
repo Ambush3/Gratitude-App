@@ -1,36 +1,36 @@
 <%- include('partials/header') -%>
-<div class="container">
-    <div class="row mt-5 justify-content-center">
-        <!--      <div class="col-6">-->
-        <!--          -->
-        <!--      </div>-->
-        <div class="col-lg-4 col-md-4 col-sm-8 profile-header">
-            <!-- show profile pic image in img src -->
-            <!-- grab ProfilePic.image from createProfilePic -->
-            <div class="name-and-pic">
-                <div class="profilePictureImage">
-                    <% profilePic.forEach(function(profilePic) { %>
-                        <img src="<%= profilePic.image %>" class="img-fluid rounded-square" alt="profile pic">
-                    <% }) %>
+    <div class="container">
+        <div class="row mt-5 justify-content-center">
+            <div class="col-lg-4 col-md-4 col-sm-8 profile-header">
+                <div class="d-flex align-items-center">
+                    <div class="profilePictureImage me-3">
+                        <% profilePic.forEach(function(profilePic) { %>
+                            <img src="<%= profilePic.image %>" class="img-fluid rounded-square" alt="profile pic">
+                            <% }) %>
+                    </div>
+                    <div>
+                        <h1 class="userName mb-0">Hi <%= user.userName %>
+                        </h1>
+                        <p class="mb-0">
+                            <%= posts.length %> Posts
+                        </p>
+                    </div>
                 </div>
-                <h1 class="userName">Hi <%= user.userName %></h1>
-            </div>
-            <div class="mb-2 d-flex justify-content-center">
-                <div>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gratitudeModal">
-                        Add Content
-                    </button>
+                <div class="d-flex align-items-center mt-2">
+                    <div class="me-3">
+                        <a href="/edit-profile" data-bs-toggle="tooltip" title="Edit Profile">
+                            <i class="fa-solid fa-gear fa-xl"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#gratitudeModal">Add Content</button>
+                    </div>
                 </div>
-                <div class="ms-3 mt-1">
-                    <a href="/edit-profile">
-                        <i class="fa-solid fa-gear fa-xl"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="modal fade" id="gratitudeModal" tabindex="-1" aria-labelledby="gratitudeModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
+                <div class="modal fade" id="gratitudeModal" tabindex="-1" aria-labelledby="gratitudeModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="gratitudeModalLabel">Add Content</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -46,7 +46,6 @@
                                     <textarea class="form-control" id="caption" name="caption"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <!-- <label for="addImage" class="form-label">Add Image</label> -->
                                     <div class="input-group">
                                         <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('imageUpload').click()">
                                             Add Image
