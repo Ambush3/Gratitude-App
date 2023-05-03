@@ -3,39 +3,85 @@ const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 const ProfilePicture = require("../models/ProfilePicture");
 const User = require("../models/User");
-const SavedPosts = require("../models/SavedPosts");
+const SavedPost = require("../models/SavedPosts");
 
 module.exports = {
   getProfile: async (req, res) => {
+  //   try {
+  //     const posts = await Post.find({ user: req.user.id }); // find all posts by the current user id
+  //     const savedPosts = await SavedPost.find({ user: req.user.id }).populate('post'); // find all saved posts by the current user id
+  //     const profilePic = await ProfilePicture.find({ user: req.user.id, profilePicture: req.user.profilePicture });
+  //     const type = req.query.type || 'posts'; // Get the type from the query parameter
+  //     res.render("profile.ejs", { posts: posts, savedPosts: savedPosts, profilePic: profilePic, user: req.user, type: type }); // render the profile page and pass the posts, savedPosts, and user data to it
+
+  //     console.log('these are the saved posts', savedPosts);
+  //   } catch (err) {
+  //  console.log   (err);
+  //   }
     try {
-      const posts = await Post.find({ user: req.user.id }); // find all posts by the current user id
-      const profilePic = await ProfilePicture.find({ user: req.user.id, profilePicture: req.user.profilePicture});
-      res.render("profile.ejs", { posts: posts, profilePic: profilePic, user: req.user }); // render the profile page and pass the posts and user data to it
+      const posts = await Post.find({ user: req.user.id });
+      const savedPosts = await SavedPost.find({ user: req.user.id }).populate('post');
+
+      console.log('saved posts', savedPosts);
+      const profilePic = await ProfilePicture.find({ user: req.user.id, profilePicture: req.user.profilePicture });
+      res.render("profile.ejs", { posts: posts, savedPosts: savedPosts, profilePic: profilePic, user: req.user, type: req.query.type || 'posts' });
     } catch (err) {
       console.log(err);
     }
   },
+
   getPost: async (req, res) => {
     try {
       const post = await Post.findById(req.params.id); // find the post by its id
-      const comments = await Comment.find({post: req.params.id}).sort({ createdAt: "desc" }).lean(); // find all comments for the post and sort them by the date they were created
-      res.render("post.ejs", { post: post, user: req.user, comments: comments }); // render the post page and pass in the post, user and comments
+      const comments = await Comment.find({ post: req.params.id }).sort({ createdAt: "desc" }).lean(); // find all comments for the post and sort them by the date they were created
+      const profilePic = await ProfilePicture.find({ user: req.user.id, profilePicture: req.user.profilePicture });
+      res.render("post.ejs", { post: post, user: req.user, comments: comments, profilePic: profilePic }); // render the post page and pass in the post, user, comments, and profilePic
     } catch (err) {
       console.log(err);
     }
   },
+  
   savePost: async (req, res) => {
-    try { 
-      const savedPost = await SavedPosts.create({
-        post: req.params.id,
-        user: req.user.id,
-      });
-      console.log("Saved Post");
-      res.redirect("/profile");
+    try {
+      const user = await User.findById(req.user.id);
+      const post = await Post.findById(req.params.id);
+
+      console.log('this is the saved post', post);
+
+      // Check if the post is already saved by the user
+      const existingSavedPost = await SavedPost.findOne({ user: user._id, post: post._id });
+
+      if (!existingSavedPost) {
+        // Create a new SavedPost document
+        const savedPost = new SavedPost({
+          user: user._id,
+          post: post._id,
+        });
+
+        await savedPost.save();
+      }
+
+      res.redirect("back");
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      return res.render("error/500");
     }
   },
+
+  unsavePost: async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      const post = await Post.findById(req.params.id);
+
+      // Find and remove the SavedPost with the given user ID and post ID
+      await SavedPost.findOneAndRemove({ user: user._id, post: post._id });
+
+      res.redirect("back");
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  
   createPost: async (req, res) => {
     try {
       // check if image is uploaded
@@ -90,21 +136,6 @@ module.exports = {
       res.redirect("/profile");
     }
   },
-    
-  // savePost to a collection of saved posts to be viewed later
-  // savePost: async (req, res) => {
-  //   try {
-  //     // Find post by id
-  //     let post = await Post.findById({ _id: req.params.id }); // find the post by its id and store it in the post variable
-      
-  //     // Save post to db
-  //     await Post.save({ _id: req.params.id });  // Save post to db
-  //     console.log("Saved Post");
-  //     res.redirect("/profile"); // redirect to the profile page
-  //   } catch (err) {
-  //     res.redirect("/profile");
-  //   }
-  // },
 
   logout: async (req, res) => {
       req.logout();
