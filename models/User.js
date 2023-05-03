@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
+const Post = require('./Post');
 
 const UserSchema = new mongoose.Schema({
   userName: { type: String, unique: true },
@@ -7,6 +8,12 @@ const UserSchema = new mongoose.Schema({
   password: String,
   resetToken: String,
   resetTokenExpiration: Date,
+  savedPosts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Post',
+    },
+  ],
 });
 
 // Password hash middleware.

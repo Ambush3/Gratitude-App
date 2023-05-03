@@ -3,6 +3,7 @@ const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 const ProfilePicture = require("../models/ProfilePicture");
 const User = require("../models/User");
+const SavedPosts = require("../models/SavedPosts");
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -10,8 +11,6 @@ module.exports = {
       const posts = await Post.find({ user: req.user.id }); // find all posts by the current user id
       const profilePic = await ProfilePicture.find({ user: req.user.id, profilePicture: req.user.profilePicture});
       res.render("profile.ejs", { posts: posts, profilePic: profilePic, user: req.user }); // render the profile page and pass the posts and user data to it
-      // find profile pic by the current user id
-
     } catch (err) {
       console.log(err);
     }
@@ -25,26 +24,18 @@ module.exports = {
       console.log(err);
     }
   },
-  // createPost: async (req, res) => {
-  //   try {
-  //     // Upload image to cloudinary
-  //     const result = await cloudinary.uploader.upload(req.file.path);
-
-  //     await Post.create({
-  //       title: req.body.title,
-  //       image: result.secure_url,
-  //       cloudinaryId: result.public_id,
-  //       caption: req.body.caption,
-  //       likes: 0,
-  //       user: req.user.id, // add the user id to the post
-  //     });
-  //     console.log('image', result.secure_url);
-  //     console.log("Post has been added!");
-  //     res.redirect("/profile");
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // },
+  savePost: async (req, res) => {
+    try { 
+      const savedPost = await SavedPosts.create({
+        post: req.params.id,
+        user: req.user.id,
+      });
+      console.log("Saved Post");
+      res.redirect("/profile");
+    } catch (err) {
+      console.log(err);
+    }
+  },
   createPost: async (req, res) => {
     try {
       // check if image is uploaded
