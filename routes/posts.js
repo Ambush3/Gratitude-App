@@ -13,4 +13,5 @@ router.post("/savePost/:id", postsController.savePost);
 router.get("/logout", postsController.logout);
 router.post("/profile", postsController.getPostByDate);
 router.post("/createProfilePic", upload.single("file"), postsController.createProfilePic);
+router.delete('/unsavePost/:id', ensureAuth, postsController.unsavePost);
 module.exports = router;

@@ -12,7 +12,10 @@
                         <h1 class="userName mb-0">Hi <%= user.userName %>
                         </h1>
                         <p class="mb-0">
-                            <%= posts.length %> Posts
+                            <p class="mb-0">
+                                <%= type==='saved' ? savedPosts.filter(sp=> sp.post).length : posts.length %>
+                                    <%= type.charAt(0).toUpperCase() + type.slice(1) %>
+                            </p>
                         </p>
                     </div>
                 </div>
@@ -88,40 +91,70 @@
         <ul class="mt-5 row list-unstyled">
             <ul class="nav nav-tabs mb-3">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="?type=posts">Posts</a>
+                    <a class="nav-link <%= type === 'posts' ? 'active' : '' %>" aria-current="page" href="?type=posts">Posts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="?type=saved">Saved</a>
+                    <a class="nav-link <%= type === 'saved' ? 'active' : '' %>" href="?type=saved">Saved</a>
                 </li>
             </ul>
-            <% posts.reverse().forEach(function(post) { %>
-                <li class="col-12">
-                    <div class="card mb-3">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="card-title">
-                                <%= post.title %>
-                            </h5>
-                            <p class="card-text text-muted">
-                                <%= post.createdAt.toLocaleDateString() %>
-                            </p>
+            <% if (type==='saved' ) { %>
+                <% savedPosts.reverse().forEach(function(savedPost) { %>
+                    <% if (savedPost.post) { %>
+                        <li class="col-12">
+                            <div class="card mb-3">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">
+                                        <%= savedPost.post.title %>
+                                    </h5>
+                                    <p class="card-text text-muted">
+                                        <%= savedPost.post.createdAt.toLocaleDateString() %>
+                                    </p>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <%= savedPost.post.caption %>
+                                    </p>
+                                    <img src="<%= savedPost.post.image %>" class="card-img-top" alt="...">
+                                </div>
+                                <div class="card-footer d-flex justify-content-end">
+                                    <form action="/post/unsavePost/<%= savedPost.post._id %>?_method=DELETE" method="POST" class="me-2">
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    <% } %>
+                <% }) %>
+            <% } else { %>
+                <% posts.reverse().forEach(function(post) { %>
+                    <li class="col-12">
+                        <div class="card mb-3">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title">
+                                    <%= post.title %>
+                                </h5>
+                                <p class="card-text text-muted">
+                                    <%= post.createdAt.toLocaleDateString() %>
+                                </p>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <%= post.caption %>
+                                </p>
+                                <img src="<%= post.image %>" class="card-img-top" alt="...">
+                            </div>
+                            <div class="card-footer d-flex justify-content-end">
+                                <form action="/post/savePost/<%= post._id %>" method="POST" class="me-2">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i></button>
+                                </form>
+                                <form action="/post/<%= post._id %>?_method=DELETE" method="POST">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <%= post.caption %>
-                            </p>
-                            <img src="<%= post.image %>" class="card-img-top" alt="...">
-                        </div>
-                        <div class="card-footer d-flex justify-content-end">
-                            <form action="/post/savePost/<%= post._id %>" method="POST" class="me-2">
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i></button>
-                            </form>
-                            <form action="/post/<%= post._id %>?_method=DELETE" method="POST">
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i></button>
-                            </form>
-                        </div>
-                    </div>
-                </li>
-            <% }) %>
+                    </li>
+                <% }) %>
+            <% } %>
         </ul>
     </div>
 </div>
