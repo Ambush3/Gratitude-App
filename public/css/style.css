@@ -123,6 +123,9 @@ h1 a {
     .menu__box {
         width: 100%;
     }
+    .container {
+        margin-top: 5em;
+    }
     .header-container {
         position: fixed;
         top: 0;
