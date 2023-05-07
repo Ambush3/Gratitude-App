@@ -22,7 +22,6 @@ module.exports = {
       const posts = await Post.find({ user: req.user.id });
       const savedPosts = await SavedPost.find({ user: req.user.id }).populate('post');
 
-      console.log('saved posts', savedPosts);
       const profilePic = await ProfilePicture.find({ user: req.user.id, profilePicture: req.user.profilePicture });
       res.render("profile.ejs", { posts: posts, savedPosts: savedPosts, profilePic: profilePic, user: req.user, type: req.query.type || 'posts' });
     } catch (err) {
