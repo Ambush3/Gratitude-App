@@ -120,6 +120,31 @@
           const addEntryContainer = document.getElementById('addEntryContainer');
           
         });
+
+        function prepareDelete(postId) {
+            document.getElementById('confirmDelete').addEventListener('click', (event) => {
+              event.preventDefault();
+
+              fetch(`/post/${postId}`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.message === 'Post deleted successfully') {
+                    window.location.href = '/profile';
+                  } else {
+                    alert('Something went wrong. Please try again.');
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            });
+          }
+
     </script>
   </body>
 </html>
