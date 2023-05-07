@@ -127,15 +127,16 @@ module.exports = {
 
   deletePost: async (req, res) => {
     try {
-      let post = await Post.findById({ _id: req.params.id }); // find the post by its id and store it in the post variable
-      await cloudinary.uploader.destroy(post.cloudinaryId); // delete the image from cloudinary using the cloudinaryId
-      await Post.remove({ _id: req.params.id });  // Delete post from db
+      let post = await Post.findById({ _id: req.params.id });
+      await cloudinary.uploader.destroy(post.cloudinaryId);
+      await Post.remove({ _id: req.params.id });
       console.log("Deleted Post");
-      res.redirect("/profile"); // redirect to the profile page
+      res.status(200).json({ message: 'Post deleted successfully' });
     } catch (err) {
-      res.redirect("/profile");
+      res.status(500).json({ message: 'Error deleting the post' });
     }
   },
+
 
   logout: async (req, res) => {
       req.logout();
