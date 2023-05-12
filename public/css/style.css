@@ -200,6 +200,12 @@ h1 a {
     padding: 1em;
 }
 
+@media screen and (max-width: 768px) {
+    .motivational-quote {
+        margin: 20em auto;
+    }
+}
+
 .the-quote {
     font-size: 1.5em;
     font-style: italic;
