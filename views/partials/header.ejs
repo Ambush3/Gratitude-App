@@ -145,6 +145,39 @@
             });
           }
 
+          function prepareEdit(postId) {
+              document.getElementById('confirmEdit').addEventListener('click', (event) => {
+                event.preventDefault();
+
+                const title = document.getElementById('title').value;
+                const caption = document.getElementById('caption').value;
+                const imageUpload = document.getElementById('imageUpload').files[0];
+                const formData = new FormData();
+
+                console.log('this is the formData', formData);
+
+                formData.append('title', title);
+                formData.append('caption', caption);
+                formData.append('imageUpload', imageUpload);
+
+                fetch(`/post/${postId}`, {
+                  method: 'PUT',
+                  body: formData,
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.message === 'Post updated successfully') {
+                      window.location.href = '/profile';
+                    } else {
+                      alert('Something went wrong. Please try again.');
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              });
+            }
+
     </script>
   </body>
 </html>
