@@ -5,6 +5,7 @@ const homeController = require("../controllers/home");
 const motivationController = require("../controllers/motivation");
 const editProfileController = require("../controllers/editProfile");
 const postsController = require("../controllers/posts");
+const upload = require("../middleware/multer");
 const { ensureAuth} = require("../middleware/auth");
 
 router.get("/", homeController.getIndex);
@@ -24,6 +25,7 @@ router.delete("/post/:id", postsController.deletePost);
 // router.post("/savePost/:id", postsController.savePost);
 // router.get("/save-post", postsController.getSavedPosts); TODO: // work on this route
 // router.post("/profile", postsController.getPostByDate);
+router.put("/post/:id", upload.single("imageUpload"), postsController.updatePost);
 router.get("/daily-motivation", motivationController.getMotivation);
 router.get("/edit-profile", ensureAuth, editProfileController.getEditProfile);
 router.post("/edit-profile/change-username", ensureAuth, editProfileController.postChangeUsername);

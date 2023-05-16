@@ -136,6 +136,36 @@ module.exports = {
     }
   },
 
+  updatePost: async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id);
+      if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+
+      post.title = req.body.title || post.title;
+      post.caption = req.body.caption || post.caption;
+      if (req.file) {
+        post.image = req.file.filename;
+      }
+
+      const validationResult = post.validateSync();
+      if (validationResult) {
+        const errors = Object.keys(validationResult.errors).map((key) => ({
+          field: key,
+          message: validationResult.errors[key].message,
+        }));
+        return res.status(400).json({ errors });
+      }
+
+      await post.save();
+
+      res.json({ message: "Post updated successfully" });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send("Internal server error");
+    }
+  },
 
   logout: async (req, res) => {
       req.logout();
