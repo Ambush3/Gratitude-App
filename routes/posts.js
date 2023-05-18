@@ -13,6 +13,7 @@ router.get("/logout", postsController.logout);
 router.post("/profile", postsController.getPostByDate);
 router.post("/createProfilePic", upload.single("file"), postsController.createProfilePic);
 router.delete("/unsavePost/:id", ensureAuth, postsController.unsavePost);
+router.put("/post/:id", upload.single("imageUpload"), postsController.updatePost);
 
 module.exports = router;
 
