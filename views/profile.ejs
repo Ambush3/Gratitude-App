@@ -144,8 +144,9 @@
                                 <img src="<%= post.image %>" class="card-img-top" alt="...">
                             </div>
                             <div class="card-footer d-flex justify-content-end">
-                                <button type="button" class="me-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPostModal"
-                                    onclick="prepareEdit('<%= post._id %>')">
+                                <button type="button" class="me-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPostModal" onclick="if (document.querySelector('#editPostModal').style.display === 'none') {
+                                      prepareEdit('<%= post._id %>', '<%= post.title %>', '<%= post.caption %>', '<%= post.image %>');
+                                  }">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <form action="/post/savePost/<%= post._id %>" method="POST" class="me-2">
@@ -164,7 +165,6 @@
                                             <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <!-- Form for editing the post -->
                                         <div class="modal-body">
                                             <form action="/post/<%= post._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                                                 <div class="mb-3">

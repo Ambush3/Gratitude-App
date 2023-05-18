@@ -122,62 +122,81 @@
         });
 
         function prepareDelete(postId) {
-            document.getElementById('confirmDelete').addEventListener('click', (event) => {
-              event.preventDefault();
+          document.getElementById('confirmDelete').addEventListener('click', (event) => {
+            event.preventDefault();
 
-              fetch(`/post/${postId}`, {
-                method: 'DELETE',
+            fetch(`/post/${postId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.message === 'Post deleted successfully') {
+                  window.location.href = '/profile';
+                } else {
+                  alert('Something went wrong. Please try again.');
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          });
+        };
+
+        function prepareEdit(postId, title, caption, image) {
+            const editModal = document.querySelector('#editPostModal');
+            const confirmEdit = editModal.querySelector('#confirmEdit');
+            const titleInput = editModal.querySelector('#title');
+            const captionInput = editModal.querySelector('#caption');
+            const imageInput = editModal.querySelector('#imageUpload');
+            const preview = editModal.querySelector('#preview');
+
+            // Set the form input values to the parameter values
+            titleInput.value = title;
+            captionInput.value = caption;
+            if (image) {
+              // If we have a new image, update the image preview and input file
+              preview.src = image;
+              preview.classList.remove('d-none');
+              imageInput.value = '';
+            } else {
+              // If we don't have a new image, clear the preview and input file
+              preview.src = '#';
+              preview.classList.add('d-none');
+              imageInput.value = '';
+            }
+
+            confirmEdit.addEventListener('click', (event) => {
+              event.preventDefault();
+              const formData = new FormData();
+              formData.append('title', titleInput.value);
+              formData.append('caption', captionInput.value);
+              formData.append('imageUpload', imageInput.files[0]);
+
+              fetch(`/post/${postId}?_method=PUT`, {
+                method: 'POST',
+                body: formData,
                 headers: {
-                  'Content-Type': 'application/json',
-                },
+                  Accept: 'application/json'
+                }
               })
                 .then((response) => response.json())
                 .then((data) => {
-                  if (data.message === 'Post deleted successfully') {
+                  if (data.message === 'Post updated successfully') {
+                    // Redirect to the profile page
                     window.location.href = '/profile';
                   } else {
-                    alert('Something went wrong. Please try again.');
+                    throw new Error('Something went wrong. Please try again.');
                   }
                 })
                 .catch((error) => {
                   console.log(error);
+                  alert(error.message);
                 });
             });
           }
-
-          function prepareEdit(postId) {
-              document.getElementById('confirmEdit').addEventListener('click', (event) => {
-                event.preventDefault();
-
-                const title = document.getElementById('title').value;
-                const caption = document.getElementById('caption').value;
-                const imageUpload = document.getElementById('imageUpload').files[0];
-                const formData = new FormData();
-
-                console.log('this is the formData', formData);
-
-                formData.append('title', title);
-                formData.append('caption', caption);
-                formData.append('imageUpload', imageUpload);
-
-                fetch(`/post/${postId}`, {
-                  method: 'PUT',
-                  body: formData,
-                })
-                  .then((response) => response.json())
-                  .then((data) => {
-                    if (data.message === 'Post updated successfully') {
-                      window.location.href = '/profile';
-                    } else {
-                      alert('Something went wrong. Please try again.');
-                    }
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              });
-            }
-
     </script>
   </body>
 </html>

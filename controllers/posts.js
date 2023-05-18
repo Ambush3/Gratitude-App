@@ -160,7 +160,7 @@ module.exports = {
 
       await post.save();
 
-      res.json({ message: "Post updated successfully" });
+      res.redirect('/profile');
     } catch (err) {
       console.log(err);
       res.status(500).send("Internal server error");
